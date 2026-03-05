@@ -1,16 +1,16 @@
-name: Deploy (production)
+name: Deploy Placeholder (production)
 
 on:
   workflow_dispatch: {}
 
 jobs:
-  deploy:
-    name: deploy
+  placeholder:
+    name: placeholder
     runs-on: ubuntu-latest
 
     environment:
       name: production
 
     steps:
-      - name: Deployment marker
-        run: echo "Deployment to production environment recorded by GitHub."
+      - name: Placeholder marker
+        run: echo "Placeholder only: no production deployment is executed by this workflow."
