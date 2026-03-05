@@ -1,0 +1,16 @@
+name: Deploy (production)
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  deploy:
+    name: deploy
+    runs-on: ubuntu-latest
+
+    environment:
+      name: production
+
+    steps:
+      - name: Deployment marker
+        run: echo "Deployment to production environment recorded by GitHub."
