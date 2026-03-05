@@ -13,4 +13,5 @@ jobs:
 
     steps:
       - name: Placeholder marker
-        run: echo "Placeholder only: no production deployment is executed by this workflow."
+        run: |
+          echo 'Placeholder only: no production deployment is executed by this workflow.'
