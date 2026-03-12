@@ -17,5 +17,10 @@
   "bugs": {
     "url": "https://github.com/budget-control-fm/budget-control-fm-core/issues"
   },
-  "homepage": "https://github.com/budget-control-fm/budget-control-fm-core#readme"
+  "homepage": "https://github.com/budget-control-fm/budget-control-fm-core#readme",
+  "devDependencies": {
+    "@types/jest": "^30.0.0",
+    "jest": "^30.2.0",
+    "ts-jest": "^29.4.6"
+  }
 }
