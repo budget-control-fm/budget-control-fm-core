@@ -1,1 +1,1 @@
-export const hello = () => "Hi budget-control-fm-core";
+export const hello = () => "Hi budget-control-fm-cores";
