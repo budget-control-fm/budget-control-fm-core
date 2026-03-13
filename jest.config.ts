@@ -12,6 +12,9 @@ const config: Config = {
   moduleNameMapper: {
     "^(\\.{1,2}/.*)\\.js$": "$1",
   },
+  collectCoverage: true,
+  coverageReporters: ["text", "lcov"],
+  coverageDirectory: "coverage",
   coverageThreshold: {
     global: {
       branches: 70,
