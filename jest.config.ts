@@ -5,28 +5,21 @@ const config: Config = {
   testEnvironment: "node",
   testMatch: ["<rootDir>/tests/**/*.test.ts"],
   extensionsToTreatAsEsm: [".ts"],
+  passWithNoTests: false,
   transform: {
     "^.+\\.ts$": ["ts-jest", { useESM: true }],
   },
   moduleNameMapper: {
     "^(\\.{1,2}/.*)\\.js$": "$1",
   },
-  // preset: "ts-jest",
-  // testEnvironment: "node",
-  // extensionsToTreatAsEsm: [".ts"],
-  // transform: {
-  //   "^.+\\.ts$": [
-  //     "ts-jest",
-  //     {
-  //       useESM: true,
-  //       tsconfig: "tsconfig.json",
-  //     },
-  //   ],
-  // },
-  // testMatch: ["<rootDir>/tests/**/*.test.ts"],
-  // roots: ["<rootDir>/tests"],
-  // moduleFileExtensions: ["ts", "js"],
-  // clearMocks: true,
+  coverageThreshold: {
+    global: {
+      branches: 70,
+      functions: 80,
+      lines: 80,
+      statements: 80,
+    },
+  },
 };
 
 export default config;
