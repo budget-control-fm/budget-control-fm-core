@@ -28,6 +28,8 @@
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js",
     "test:coverage": "npm test -- --coverage",
+    "sonar": "sonar-scanner",
+    "sonar:local": "npm test && npm run sonar",
     "lint": "biome lint .",
     "lint:fix": "biome lint --write .",
     "format": "biome format --write .",
@@ -52,6 +54,7 @@
   "homepage": "https://github.com/budget-control-fm/budget-control-fm-core#readme",
   "devDependencies": {
     "@biomejs/biome": "^2.4.6",
+    "@sonar/scan": "^4.3.5",
     "@types/jest": "^29.5.14",
     "@types/node": "^25.4.0",
     "jest": "^29.7.0",
