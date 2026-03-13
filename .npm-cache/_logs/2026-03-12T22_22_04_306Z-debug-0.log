@@ -1,0 +1,45 @@
+0 verbose cli /Users/avalara/.nvm/versions/node/v24.14.0/bin/node /Users/avalara/.nvm/versions/node/v24.14.0/bin/npm
+1 info using npm@11.9.0
+2 info using node@v24.14.0
+3 silly config load:file:/Users/avalara/.nvm/versions/node/v24.14.0/lib/node_modules/npm/npmrc
+4 silly config load:file:/Users/avalara/Dev/budget-control-fm/budget-control-fm-core/.npmrc
+5 silly config load:file:/Users/avalara/.npmrc
+6 silly config load:file:/Users/avalara/.nvm/versions/node/v24.14.0/etc/npmrc
+7 verbose title npm pack
+8 verbose argv "pack" "--dry-run"
+9 verbose logfile logs-max:10 dir:/Users/avalara/Dev/budget-control-fm/budget-control-fm-core/.npm-cache/_logs/2026-03-12T22_22_04_306Z-
+10 verbose logfile /Users/avalara/Dev/budget-control-fm/budget-control-fm-core/.npm-cache/_logs/2026-03-12T22_22_04_306Z-debug-0.log
+11 silly logfile done cleaning log files
+12 http fetch GET https://registry.npmjs.org/npm attempt 1 failed with ENOTFOUND
+13 silly packumentCache heap:4496293888 maxSize:1124073472 maxEntrySize:562036736
+14 warn gitignore-fallback No .npmignore file found, using .gitignore for file exclusion. Consider creating a .npmignore file to explicitly control published files.
+15 notice
+16 notice 📦  budget-control-fm-core@1.0.0
+17 notice Tarball Contents
+18 notice 588B .github/workflows/ci.yml
+18 notice 1.2kB .npm-cache/_logs/2026-03-12T22_22_04_306Z-debug-0.log
+18 notice 0B .npm-cache/_update-notifier-last-checked
+18 notice 2B .nvmrc
+18 notice 10B README.md
+18 notice 771B jest.config.ts
+18 notice 1.3kB package.json
+18 notice 56B src/index.ts
+18 notice 180B tests/index.test.ts
+18 notice 258B tsconfig.build.json
+18 notice 633B tsconfig.json
+19 notice Tarball Details
+20 notice name: budget-control-fm-core
+21 notice version: 1.0.0
+22 notice filename: budget-control-fm-core-1.0.0.tgz
+23 notice package size: 2.3 kB
+24 notice unpacked size: 5.0 kB
+25 notice shasum: 216cb6ba3979d7b3773ec06a6301a63c2c4b552d
+26 notice integrity: sha512-uiTKq3XC4J7R3[...]SFBA1qoZ6l+1Q==
+27 notice total files: 11
+28 notice
+29 verbose cwd /Users/avalara/Dev/budget-control-fm/budget-control-fm-core
+30 verbose os Darwin 25.3.0
+31 verbose node v24.14.0
+32 verbose npm  v11.9.0
+33 verbose exit 0
+34 info ok
