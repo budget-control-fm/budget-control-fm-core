@@ -2,11 +2,11 @@
   "name": "budget-control-fm-core",
   "author": "Fabio Moggi",
   "description": "Core functionality for the budget control financial management system",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "license": "ISC",
   "type": "module",
   "engines": {
-    "node": "24.x"
+    "node": ">=20"
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -27,15 +27,16 @@
     "build:watch": "tsc -watch -p tsconfig.build.json",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js",
-    "test:coverage": "npm test -- --coverage",
+    "test:coverage": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js --coverage",
     "sonar": "sonar-scanner",
     "sonar:local": "npm test && npm run sonar",
     "lint": "biome lint .",
     "lint:fix": "biome lint --write .",
     "format": "biome format --write .",
     "clean": "rm -rf dist",
+    "prepublishOnly": "npm run build",
     "prebuild": "npm run clean",
-    "preinstall": "node -e \"const v=process.versions.node.split('.')[0]; if(v !== '24'){ console.error('Node 24 required. Current: ' + process.versions.node); process.exit(1) }\""
+    "prepack": "npm run lint && npm run typecheck && npm run test:coverage && npm run build"
   },
   "repository": {
     "type": "git",
