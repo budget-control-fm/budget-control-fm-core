@@ -1,0 +1,6 @@
+{
+  "sonarlint.connectedMode.project": {
+    "connectionId": "budget-control-fm",
+    "projectKey": "budget-control-fm_budget-control-fm-core"
+  }
+}
