@@ -39,7 +39,13 @@
     "type": "git",
     "url": "git+https://github.com/budget-control-fm/budget-control-fm-core.git"
   },
-  "keywords": [],
+  "keywords": [
+    "budget",
+    "finance",
+    "personal-finance",
+    "budget-control",
+    "financial-management"
+  ],
   "bugs": {
     "url": "https://github.com/budget-control-fm/budget-control-fm-core/issues"
   },
