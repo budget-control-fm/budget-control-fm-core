@@ -21,6 +21,20 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           fetch-depth: 0
+          persist-credentials: false
+
+      - name: Debug git history for Sonar
+        run: |
+          git rev-parse --is-shallow-repository
+          test -f .git/shallow && echo ".git/shallow exists" || echo ".git/shallow missing"
+          git log --oneline -n 5
+          git branch -a
+
+      - name: Ensure full git history
+        run: |
+          git fetch --prune --unshallow || true
+          git fetch --prune --tags
+          git rev-parse --is-shallow-repository
 
       - name: Setup Node
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
