@@ -13,9 +13,6 @@
     "sourceMap": true,
     "declaration": true,
     "noEmit": true,
-    // Additional options
-    "noImplicitAny": true,
-    "strictNullChecks": true,
     "isolatedModules": true,
     "forceConsistentCasingInFileNames": true,
     "verbatimModuleSyntax": true
