@@ -6,8 +6,6 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
-    ignore:
-      - dependency-name: "*"
 
   # Keep npm dependencies up to date
   - package-ecosystem: "npm"
