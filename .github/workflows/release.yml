@@ -47,23 +47,10 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Capture latest main SHA
-        id: main_sha
-        run: |
-          git fetch origin main:refs/remotes/origin/main
-          echo "sha=$(git rev-parse refs/remotes/origin/main)" >> "$GITHUB_OUTPUT"
-          echo "workflow_sha=$GITHUB_SHA"
-          echo "main_sha=$(git rev-parse refs/remotes/origin/main)"
-
       - name: Create Release PR or Publish
-        if: ${{ github.sha == steps.main_sha.outputs.sha }}
         uses: changesets/action@e87c8ed249971350e47fab7515075f44eb134e5b
         with:
           version: npm run version-packages
           publish: npm run release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Skip because run is stale
-        if: ${{ github.sha != steps.main_sha.outputs.sha }}
-        run: echo "Skipping release because a newer commit is already on main."
