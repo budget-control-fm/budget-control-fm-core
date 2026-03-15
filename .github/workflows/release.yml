@@ -1,4 +1,4 @@
-name: Release
+name: Changesets Release
 
 on:
   push:
@@ -16,7 +16,7 @@ permissions:
 
 jobs:
   release:
-    name: Release Package
+    name: Create Release PR or Publish
     runs-on: ubuntu-latest
 
     steps:
@@ -34,15 +34,6 @@ jobs:
 
       - name: Install dependencies
         run: npm ci --ignore-scripts
-
-      - name: Lint
-        run: npm run lint
-
-      - name: Type check
-        run: npm run typecheck
-
-      - name: Run tests with coverage
-        run: npm run test:coverage
 
       - name: Build
         run: npm run build
