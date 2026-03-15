@@ -23,7 +23,8 @@
   ],
   "scripts": {
     "dev": "tsx src/index.ts",
-    "build": "npm run clean && tsc -p tsconfig.build.json",
+    "prebuild": "npm run clean",
+    "build": "tsc -p tsconfig.build.json",
     "build:watch": "tsc -watch -p tsconfig.build.json",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js",
@@ -34,7 +35,6 @@
     "lint:fix": "biome lint --write .",
     "format": "biome format --write .",
     "clean": "rm -rf dist",
-    "prebuild": "npm run clean",
     "prepack": "npm run lint && npm run typecheck && npm run test:coverage && npm run build",
     "prepublishOnly": "npm run build",
     "changeset": "changeset",
