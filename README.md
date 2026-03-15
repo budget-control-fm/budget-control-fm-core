@@ -17,4 +17,4 @@ npm install budget-control-fm-core
 
 This package is ESM-only. Consumers must use `import` syntax or an ESM-compatible runtime/toolchain.
 
-.
+End
