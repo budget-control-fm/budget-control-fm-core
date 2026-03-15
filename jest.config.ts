@@ -2,6 +2,7 @@ import type { Config } from "jest";
 
 const config: Config = {
   preset: "ts-jest/presets/default-esm",
+  coverageProvider: "v8",
   testEnvironment: "node",
   testMatch: ["<rootDir>/tests/**/*.test.ts"],
   extensionsToTreatAsEsm: [".ts"],
@@ -12,6 +13,7 @@ const config: Config = {
   moduleNameMapper: {
     "^(\\.{1,2}/.*)\\.js$": "$1",
   },
+  collectCoverageFrom: ["src/**/*.ts", "!src/**/*.d.ts"],
   coverageReporters: ["text", "lcov"],
   coverageDirectory: "coverage",
   coverageThreshold: {
