@@ -52,6 +52,9 @@ jobs:
       - name: SonarQube Cloud Scan
         if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
         uses: SonarSource/sonarqube-scan-action@a31c9398be7ace6bbfaf30c0bd5d415f843d45e9
+        with:
+          args: >
+            -Dsonar.projectVersion=$(node -p "require('./package.json').version")
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: https://sonarcloud.io

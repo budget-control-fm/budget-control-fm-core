@@ -38,7 +38,7 @@
     "prepack": "npm run lint && npm run typecheck && npm run test:coverage && npm run build",
     "changeset": "changeset",
     "version-packages": "changeset version",
-    "release": "changeset publish && npm publish --provenance"
+    "release": "changeset publish"
   },
   "repository": {
     "type": "git",
@@ -66,5 +66,9 @@
     "ts-node": "^10.9.2",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
   }
 }
