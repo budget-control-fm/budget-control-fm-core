@@ -5,6 +5,7 @@ on:
     branches:
       - feature/**
       - bugfix/**
+      - changeset-release/**
 
   pull_request:
     branches:
