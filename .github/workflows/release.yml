@@ -2,27 +2,28 @@ name: Release
 
 on:
   push:
-    tags:
-      - "v*"
+    branches:
+      - main
+
+concurrency:
+  group: changesets-release
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  pull-requests: write
+  id-token: write
 
 jobs:
   release:
     name: Release Package
     runs-on: ubuntu-latest
 
-    permissions:
-      contents: read
-
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           fetch-depth: 0
-
-      - name: Ensure tag points to main history
-        run: |
-          git fetch origin main
-          git branch --remotes --contains "$GITHUB_SHA" | grep "origin/main"
 
       - name: Setup Node
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
@@ -46,33 +47,10 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Verify package contents
-        run: npm pack --dry-run
-
-      - name: Verify tag matches package version
-        run: |
-          PACKAGE_VERSION=$(node -p "require('./package.json').version")
-          TAG_VERSION="${GITHUB_REF_NAME#v}"
-
-          echo "package.json version: $PACKAGE_VERSION"
-          echo "Git tag version: $TAG_VERSION"
-
-          if [ "$PACKAGE_VERSION" != "$TAG_VERSION" ]; then
-            echo "Tag version does not match package.json version"
-            exit 1
-          fi
-
-      - name: Prevent duplicate publish
-        run: |
-          PACKAGE_NAME=$(node -p "require('./package.json').name")
-          PACKAGE_VERSION=$(node -p "require('./package.json').version")
-
-          if npm view "$PACKAGE_NAME@$PACKAGE_VERSION" version >/dev/null 2>&1; then
-            echo "Version already published: $PACKAGE_NAME@$PACKAGE_VERSION"
-            exit 1
-          fi
-
-      - name: Publish to npm
-        run: npm publish
+      - name: Create Release PR or Publish
+        uses: changesets/action@e87c8ed249971350e47fab7515075f44eb134e5b
+        with:
+          version: npm run version-packages
+          publish: npm run release
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

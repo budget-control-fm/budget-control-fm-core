@@ -36,7 +36,10 @@
     "clean": "rm -rf dist",
     "prepublishOnly": "npm run build",
     "prebuild": "npm run clean",
-    "prepack": "npm run lint && npm run typecheck && npm run test:coverage && npm run build"
+    "prepack": "npm run lint && npm run typecheck && npm run test:coverage && npm run build",
+    "changeset": "changeset",
+    "version-packages": "changeset version",
+    "release": "changeset publish"
   },
   "repository": {
     "type": "git",
@@ -55,6 +58,7 @@
   "homepage": "https://github.com/budget-control-fm/budget-control-fm-core#readme",
   "devDependencies": {
     "@biomejs/biome": "^2.4.6",
+    "@changesets/cli": "^2.30.0",
     "@sonar/scan": "^4.3.5",
     "@types/jest": "^29.5.14",
     "@types/node": "^25.4.0",
