@@ -10,7 +10,7 @@ This package is **ESM-only**.
 
 ## Requirements
 
-- Node.js **24.x or later**
+- Node.js **20 or later (LTS recommended)**
 - An **ESM-compatible environment**
 
 If your project still uses CommonJS, you must migrate it to ESM before using this library.
