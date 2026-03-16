@@ -27,55 +27,58 @@ describe("Uuid.of()", () => {
   });
 
   describe("invalid inputs", () => {
-    it("throws for an empty string", () => {
-      expect(() => Uuid.of("")).toThrow("Uuid must be a valid UUIDv4");
+    it("throws TypeError for an empty string", () => {
+      expect(() => Uuid.of("")).toThrow(TypeError);
     });
 
-    it("throws for a plain string", () => {
+    it("throws TypeError for a plain string", () => {
+      expect(() => Uuid.of("not-a-uuid")).toThrow(TypeError);
+    });
+
+    it("throws TypeError for a UUIDv1 (wrong version digit)", () => {
+      expect(() => Uuid.of("550e8400-e29b-11d4-a716-446655440000")).toThrow(
+        TypeError,
+      );
+    });
+
+    it("throws TypeError for a UUID with wrong variant bits", () => {
+      expect(() => Uuid.of("550e8400-e29b-41d4-7716-446655440000")).toThrow(
+        TypeError,
+      );
+    });
+
+    it("throws TypeError for a UUID missing hyphens", () => {
+      expect(() => Uuid.of("550e8400e29b41d4a716446655440000")).toThrow(
+        TypeError,
+      );
+    });
+
+    it("throws TypeError for a UUID with too few characters", () => {
+      expect(() => Uuid.of("550e8400-e29b-41d4-a716-44665544000")).toThrow(
+        TypeError,
+      );
+    });
+
+    it("throws TypeError for a UUID with too many characters", () => {
+      expect(() => Uuid.of("550e8400-e29b-41d4-a716-4466554400000")).toThrow(
+        TypeError,
+      );
+    });
+
+    it("throws TypeError for a UUID with invalid hex characters", () => {
+      expect(() => Uuid.of("550e8400-e29b-41d4-a716-44665544000z")).toThrow(
+        TypeError,
+      );
+    });
+
+    it("throws TypeError for a whitespace-only string", () => {
+      expect(() => Uuid.of("   ")).toThrow(TypeError);
+    });
+
+    it("throws TypeError with correct message", () => {
       expect(() => Uuid.of("not-a-uuid")).toThrow(
         "Uuid must be a valid UUIDv4",
       );
-    });
-
-    it("throws for a UUIDv1 (wrong version digit)", () => {
-      expect(() => Uuid.of("550e8400-e29b-11d4-a716-446655440000")).toThrow(
-        "Uuid must be a valid UUIDv4",
-      );
-    });
-
-    it("throws for a UUID with wrong variant bits", () => {
-      // 3rd group's first nibble must be [89ab] — this uses '7'
-      expect(() => Uuid.of("550e8400-e29b-41d4-7716-446655440000")).toThrow(
-        "Uuid must be a valid UUIDv4",
-      );
-    });
-
-    it("throws for a UUID missing hyphens", () => {
-      expect(() => Uuid.of("550e8400e29b41d4a716446655440000")).toThrow(
-        "Uuid must be a valid UUIDv4",
-      );
-    });
-
-    it("throws for a UUID with too few characters", () => {
-      expect(() => Uuid.of("550e8400-e29b-41d4-a716-44665544000")).toThrow(
-        "Uuid must be a valid UUIDv4",
-      );
-    });
-
-    it("throws for a UUID with too many characters", () => {
-      expect(() => Uuid.of("550e8400-e29b-41d4-a716-4466554400000")).toThrow(
-        "Uuid must be a valid UUIDv4",
-      );
-    });
-
-    it("throws for a UUID with invalid hex characters", () => {
-      expect(() => Uuid.of("550e8400-e29b-41d4-a716-44665544000z")).toThrow(
-        "Uuid must be a valid UUIDv4",
-      );
-    });
-
-    it("throws for a whitespace-only string", () => {
-      expect(() => Uuid.of("   ")).toThrow("Uuid must be a valid UUIDv4");
     });
   });
 });

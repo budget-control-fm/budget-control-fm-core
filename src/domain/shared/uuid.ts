@@ -13,7 +13,7 @@ export class Uuid<T = unknown> {
     const normalized = value.trim();
 
     if (!UUID_V4_REGEX.test(normalized)) {
-      throw new Error("Uuid must be a valid UUIDv4");
+      throw new TypeError("Uuid must be a valid UUIDv4");
     }
 
     return new Uuid<T>(normalized);
