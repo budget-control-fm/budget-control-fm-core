@@ -1,4 +1,4 @@
-import { Uuid } from "../../../src/domain/shared/uuid.js";
+import { Uuid } from "../../../src/domain/shared/uuid.vo.js";
 
 // Dummy domain types for branded UUID tests
 type User = { readonly _brand: "User" };

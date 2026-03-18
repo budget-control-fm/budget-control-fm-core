@@ -13,7 +13,13 @@ const config: Config = {
   moduleNameMapper: {
     "^(\\.{1,2}/.*)\\.js$": "$1",
   },
-  collectCoverageFrom: ["src/**/*.ts", "!src/**/*.d.ts"],
+  collectCoverageFrom: [
+    "src/**/*.ts",
+    "!src/**/*.d.ts",
+    "!src/**/*.types.ts",
+    "!src/**/*.port.ts",
+    "!src/**/*.index.ts",
+  ],
   coverageReporters: ["text", "lcov"],
   coverageDirectory: "coverage",
   coverageThreshold: {
