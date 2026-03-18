@@ -1,4 +1,4 @@
-import { Amount } from "../../../src/domain/shared/amount.js";
+import { Amount } from "../../../src/domain/shared/amount.vo.js";
 
 describe("Amount.of()", () => {
   describe("valid inputs", () => {

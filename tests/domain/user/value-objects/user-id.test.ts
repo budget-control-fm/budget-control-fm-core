@@ -1,4 +1,4 @@
-import { UserId } from "../../../../src/domain/user/value-objects/user-id.js";
+import { UserId } from "../../../../src/domain/user/value-objects/user-id.vo.js";
 
 const VALID_UUID_V4 = "550e8400-e29b-41d4-a716-446655440000";
 

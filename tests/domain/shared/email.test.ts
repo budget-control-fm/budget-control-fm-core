@@ -1,4 +1,4 @@
-import { Email } from "../../../src/domain/shared/email.js";
+import { Email } from "../../../src/domain/shared/email.vo.js";
 
 describe("Email.of()", () => {
   describe("valid inputs", () => {
