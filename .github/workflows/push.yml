@@ -10,7 +10,7 @@ on:
       - docs/**
 
 concurrency:
-  group: push-${{ github.ref }}
+  group: pre-flight-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
