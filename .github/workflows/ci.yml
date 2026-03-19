@@ -1,10 +1,8 @@
-name: CI
+name: Continuous Integration
 
 on:
   push:
     branches:
-      - feature/**
-      - bugfix/**
       - changeset-release/**
 
   pull_request:
@@ -12,7 +10,7 @@ on:
       - main
 
 concurrency:
-  group: ci-${{ github.ref }}
+  group: ci-${{ github.head_ref || github.ref }}
   cancel-in-progress: true
 
 jobs:

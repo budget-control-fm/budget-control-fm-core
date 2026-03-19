@@ -1,4 +1,4 @@
-name: Changesets Release
+name: Continuous Delivery
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - main
 
 concurrency:
-  group: changesets-release
+  group: continuous-delivery
   cancel-in-progress: true
 
 permissions:
@@ -16,7 +16,7 @@ permissions:
 
 jobs:
   release:
-    name: Create Release PR or Publish
+    name: Continuous Delivery
     runs-on: ubuntu-latest
 
     steps:
@@ -35,7 +35,7 @@ jobs:
       - name: Install dependencies
         run: npm ci --ignore-scripts
 
-      - name: Create Release PR or Publish
+      - name: Release
         uses: changesets/action@e87c8ed249971350e47fab7515075f44eb134e5b
         with:
           version: npm run version-packages
