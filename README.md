@@ -33,7 +33,7 @@ console.log(hello());
 
 Output:
 
-Hi budget-control-fm-core (updated)!
+Hi budget-control-fm-core
 
 ---
 
