@@ -1,5 +1,15 @@
 # budget-control-fm-core
 
+## 0.2.0
+
+### Minor Changes
+
+- 97d3b69: Added user application layer with RegisterUserUseCase, ports, and domain entities
+
+### Patch Changes
+
+- 97ea12f: New User Registration use case
+
 ## 0.1.4
 
 ### Patch Changes
