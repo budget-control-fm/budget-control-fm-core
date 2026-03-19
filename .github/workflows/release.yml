@@ -1,4 +1,4 @@
-name: Changesets Release
+name: Continuous Delivery
 
 on:
   push:
@@ -16,7 +16,7 @@ permissions:
 
 jobs:
   release:
-    name: Create Release PR or Publish
+    name: Continuous Delivery
     runs-on: ubuntu-latest
 
     steps:

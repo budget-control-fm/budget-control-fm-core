@@ -1,4 +1,4 @@
-name: Push
+name: Pre-flight
 
 on:
   push:
@@ -15,7 +15,7 @@ concurrency:
 
 jobs:
   push:
-    name: Pre-flight Check
+    name: Pre-flight
     runs-on: ubuntu-latest
 
     steps:
