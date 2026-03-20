@@ -10,7 +10,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  ci:
+  release-gate:
     name: code ready to merge
     runs-on: ubuntu-latest
 
