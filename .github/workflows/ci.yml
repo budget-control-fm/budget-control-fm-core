@@ -12,6 +12,8 @@ concurrency:
 jobs:
   ci:
     name: code ready to merge
+    if: github.head_ref != 'changeset-release/main'
+
     runs-on: ubuntu-latest
 
     steps:
