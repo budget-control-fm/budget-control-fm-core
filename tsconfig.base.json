@@ -10,6 +10,10 @@
     "skipLibCheck": true,
     "isolatedModules": true,
     "forceConsistentCasingInFileNames": true,
-    "verbatimModuleSyntax": true
+    "verbatimModuleSyntax": true,
+    "paths": {
+      "budget-control-fm-core": ["./src/index.ts"],
+      "budget-control-fm-core/user": ["./src/application/user/index.ts"]
+    }
   }
 }

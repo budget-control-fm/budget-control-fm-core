@@ -14,6 +14,10 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
+    },
+    "./user": {
+      "import": "./dist/application/user/index.js",
+      "types": "./dist/application/user/index.d.ts"
     }
   },
   "files": [
