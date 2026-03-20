@@ -1,5 +1,12 @@
 # budget-control-fm-core
 
+## 0.2.1
+
+### Patch Changes
+
+- 426e184: Updated pipelines
+- 426e184: updated release
+
 ## 0.2.0
 
 ### Minor Changes
