@@ -15,7 +15,7 @@ concurrency:
 
 jobs:
   ci:
-    name: ready to merge
+    name: code ready to merge
     runs-on: ubuntu-latest
 
     steps:
