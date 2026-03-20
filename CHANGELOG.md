@@ -1,5 +1,11 @@
 # budget-control-fm-core
 
+## 0.2.2
+
+### Patch Changes
+
+- 7dce569: Release pipeline updated
+
 ## 0.2.1
 
 ### Patch Changes
