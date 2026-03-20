@@ -7,6 +7,5 @@
   "access": "public",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
-  "ignore": [],
-  "prTitle": "chore: release version packages"
+  "ignore": []
 }
