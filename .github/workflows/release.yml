@@ -16,7 +16,7 @@ permissions:
 
 jobs:
   release:
-    name: Continuous Delivery
+    name: Push to Main
     runs-on: ubuntu-latest
 
     steps:
@@ -40,6 +40,6 @@ jobs:
         with:
           version: npm run version-packages
           publish: npm run release
-          title: "chore: version release"
+          title: "chore: version"
         env:
           GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
