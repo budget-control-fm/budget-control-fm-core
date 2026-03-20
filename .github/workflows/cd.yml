@@ -40,6 +40,5 @@ jobs:
         with:
           version: npm run version-packages
           publish: npm run release
-          title: "chore: version release"
         env:
           GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
