@@ -1,4 +1,4 @@
-name: Pre-flight
+name: Push
 
 on:
   push:
