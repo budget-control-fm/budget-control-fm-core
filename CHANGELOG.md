@@ -1,5 +1,11 @@
 # budget-control-fm-core
 
+## 0.4.0
+
+### Minor Changes
+
+- 3a5cf4a: exports available
+
 ## 0.3.0
 
 ### Minor Changes
