@@ -15,7 +15,7 @@ concurrency:
 
 jobs:
   ci:
-    name: Continuous Integration
+    name: ready to merge
     runs-on: ubuntu-latest
 
     steps:

@@ -1,21 +1,17 @@
-name: Pre-flight
+name: Release Gate
 
 on:
   push:
     branches:
-      - feature/**
-      - bugfix/**
-      - hotfix/**
-      - chore/**
-      - docs/**
+      - changeset-release/**
 
 concurrency:
-  group: pre-flight-${{ github.ref }}
+  group: release-gate-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  push:
-    name: Push To Branch
+  ci:
+    name: code ready to merge
     runs-on: ubuntu-latest
 
     steps:
@@ -31,11 +27,5 @@ jobs:
       - name: Install dependencies
         run: npm ci --ignore-scripts
 
-      - name: Lint
-        run: npm run lint
-
-      - name: Type check
-        run: npm run typecheck
-
-      - name: Run tests
-        run: npm test
+      - name: Build
+        run: npm run build
