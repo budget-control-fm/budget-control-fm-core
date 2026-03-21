@@ -6,3 +6,5 @@ dist
 coverage
 .npm-cache
 .scannerwork
+package/
+*.tgz
