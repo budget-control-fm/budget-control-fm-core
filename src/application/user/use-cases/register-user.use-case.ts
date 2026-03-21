@@ -1,8 +1,3 @@
-export type {
-  RegisterUserCommand,
-  RegisterUserResult,
-} from "../types/register-user.types.js";
-
 import type { AuthServicePort } from "../ports/outbound/auth-service.port.js";
 import type { UserProfileRepositoryPort } from "../ports/outbound/user-profile-repository.port.js";
 import type {
