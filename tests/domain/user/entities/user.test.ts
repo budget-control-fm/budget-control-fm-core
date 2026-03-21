@@ -102,6 +102,28 @@ describe("User.create()", () => {
   });
 });
 
+describe("User.create() — age calculation is timezone-safe", () => {
+  it("accepts a user who turns exactly 18 on a January 1st registration date (UTC boundary)", () => {
+    // birthDate and createdAt on Jan 1 — local getters in UTC-N timezones
+    // shift this to Dec 31 of the previous year, corrupting the age calculation.
+    // This test must pass regardless of the server's TZ environment variable.
+    const user = makeUser({
+      birthDate: IsoDate.of("2006-01-01"),
+      createdAt: IsoDate.of("2024-01-01"),
+    });
+    expect(user.birthDate.value).toBe("2006-01-01");
+  });
+
+  it("rejects a user who turns 18 the day after the registration date (UTC boundary)", () => {
+    expect(() =>
+      makeUser({
+        birthDate: IsoDate.of("2006-01-02"),
+        createdAt: IsoDate.of("2024-01-01"),
+      }),
+    ).toThrow(TypeError);
+  });
+});
+
 describe("User.updateName()", () => {
   it("returns a new User with the updated name", () => {
     const user = makeUser();
