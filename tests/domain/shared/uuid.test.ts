@@ -15,9 +15,9 @@ describe("Uuid.of()", () => {
       expect(uuid.value).toBe(VALID_UUID_V4);
     });
 
-    it("accepts uppercase UUIDv4", () => {
+    it("normalizes uppercase UUIDv4 to lowercase", () => {
       const uuid = Uuid.of(VALID_UUID_V4_UPPERCASE);
-      expect(uuid.value).toBe(VALID_UUID_V4_UPPERCASE);
+      expect(uuid.value).toBe(VALID_UUID_V4); // stored as lowercase
     });
 
     it("trims surrounding whitespace before validating", () => {
