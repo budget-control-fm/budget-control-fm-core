@@ -137,4 +137,11 @@ describe("Uuid immutability", () => {
       uuid.value = "something-else";
     }).toThrow(TypeError);
   });
+
+  it("Uuid<User> is not assignable to Uuid<Merchant> at compile time", () => {
+    const userId = Uuid.of<User>(VALID_UUID_V4);
+    // @ts-expect-error — Uuid<User> must not be assignable to Uuid<Merchant>
+    const merchantId: Uuid<Merchant> = userId;
+    expect(merchantId).toBeDefined(); // never reached, just satisfies the linter
+  });
 });
