@@ -8,8 +8,6 @@
   "engines": {
     "node": ">=20"
   },
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
   "exports": {
     "./user": {
       "import": "./dist/application/user/index.js",
