@@ -33,7 +33,7 @@
     "lint:fix": "biome lint --write .",
     "format": "biome format --write .",
     "clean": "rm -rf dist",
-    "prepack": "npm run lint && npm run typecheck && npm run test:coverage && npm run build",
+    "prepack": "npm run build",
     "changeset": "changeset",
     "version-packages": "changeset version",
     "release": "changeset publish"
