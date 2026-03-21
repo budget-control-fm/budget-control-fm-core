@@ -65,9 +65,9 @@ export class User {
   ): boolean {
     const birth = new Date(birthDate.value);
     const reference = new Date(referenceDate.value);
-    const age = reference.getFullYear() - birth.getFullYear();
-    const monthDiff = reference.getMonth() - birth.getMonth();
-    const dayDiff = reference.getDate() - birth.getDate();
+    const age = reference.getUTCFullYear() - birth.getUTCFullYear();
+    const monthDiff = reference.getUTCMonth() - birth.getUTCMonth();
+    const dayDiff = reference.getUTCDate() - birth.getUTCDate();
     return (
       age > 18 ||
       (age === 18 && (monthDiff > 0 || (monthDiff === 0 && dayDiff >= 0)))

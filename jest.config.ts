@@ -18,7 +18,7 @@ const config: Config = {
     "!src/**/*.d.ts",
     "!src/**/*.types.ts",
     "!src/**/*.port.ts",
-    "!src/**/*.index.ts",
+    "!src/**/index.ts",
   ],
   coverageReporters: ["text", "lcov"],
   coverageDirectory: "coverage",
@@ -29,6 +29,9 @@ const config: Config = {
       lines: 90,
       statements: 90,
     },
+  },
+  testEnvironmentOptions: {
+    env: { TZ: "America/Sao_Paulo" },
   },
 };
 
