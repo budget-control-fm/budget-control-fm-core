@@ -9,7 +9,7 @@ export class Uuid<T = unknown> {
   }
 
   static of<T = unknown>(value: string): Uuid<T> {
-    const normalized = value.trim().toLocaleLowerCase();
+    const normalized = value.trim().toLowerCase();
 
     if (!UUID_V4_REGEX.test(normalized)) {
       throw new TypeError("Uuid must be a valid UUIDv4");
