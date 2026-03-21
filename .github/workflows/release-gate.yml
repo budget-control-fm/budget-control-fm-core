@@ -1,4 +1,4 @@
-name: Release Gate
+name: Pre-Release
 
 on:
   push:
@@ -6,11 +6,11 @@ on:
       - changeset-release/**
 
 concurrency:
-  group: release-gate-${{ github.ref }}
+  group: pre-release-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  release-gate:
+  pre-release:
     name: code ready to merge
 
     runs-on: ubuntu-latest
