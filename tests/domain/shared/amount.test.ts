@@ -55,6 +55,52 @@ describe("Amount.of()", () => {
   });
 });
 
+describe("Amount.of() — safe integer guard", () => {
+  it("throws TypeError for Number.MAX_SAFE_INTEGER + 1", () => {
+    expect(() => Amount.of(Number.MAX_SAFE_INTEGER + 1, "BRL")).toThrow(
+      TypeError,
+    );
+  });
+
+  it("throws TypeError for Number.MIN_SAFE_INTEGER - 1", () => {
+    expect(() => Amount.of(Number.MIN_SAFE_INTEGER - 1, "BRL")).toThrow(
+      TypeError,
+    );
+  });
+
+  it("throws TypeError with correct message", () => {
+    expect(() => Amount.of(Number.MAX_SAFE_INTEGER + 1, "BRL")).toThrow(
+      "Amount exceeds safe integer range",
+    );
+  });
+
+  it("accepts Number.MAX_SAFE_INTEGER exactly", () => {
+    const amount = Amount.of(Number.MAX_SAFE_INTEGER, "BRL");
+    expect(amount.cents).toBe(Number.MAX_SAFE_INTEGER);
+  });
+
+  it("accepts Number.MIN_SAFE_INTEGER exactly", () => {
+    const amount = Amount.of(Number.MIN_SAFE_INTEGER, "BRL");
+    expect(amount.cents).toBe(Number.MIN_SAFE_INTEGER);
+  });
+});
+
+describe("Amount.add() — overflow guard", () => {
+  it("throws TypeError when result exceeds MAX_SAFE_INTEGER", () => {
+    const a = Amount.of(Number.MAX_SAFE_INTEGER, "BRL");
+    const b = Amount.of(1, "BRL");
+    expect(() => a.add(b)).toThrow(TypeError);
+  });
+});
+
+describe("Amount.subtract() — overflow guard", () => {
+  it("throws TypeError when result exceeds MIN_SAFE_INTEGER", () => {
+    const a = Amount.of(Number.MIN_SAFE_INTEGER, "BRL");
+    const b = Amount.of(1, "BRL");
+    expect(() => a.subtract(b)).toThrow(TypeError);
+  });
+});
+
 describe("Amount.add()", () => {
   it("adds two positive amounts of the same currency", () => {
     const a = Amount.of(10000, "BRL");
