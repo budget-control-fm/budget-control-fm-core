@@ -14,6 +14,10 @@ export class Amount {
       throw new TypeError("Amount must be an integer");
     }
 
+    if (!Number.isSafeInteger(cents)) {
+      throw new TypeError("Amount exceeds safe integer range");
+    }
+
     return new Amount(cents, currency);
   }
 
