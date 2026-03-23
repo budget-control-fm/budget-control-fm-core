@@ -9,7 +9,7 @@ if [ -z "$COMMIT" ]; then
   exit 1
 fi
 
-echo "\e[32m→ Running tests...\e[0m"
+printf "${GREEN} Running tests...\e[0m"
 npm run test:coverage
 echo "-----------------------------"
 echo
@@ -19,7 +19,7 @@ git pull origin $BRANCH
 echo "-----------------------------"
 echo
 
-echo -e "\e[32m→ Committing...\e[0m"
+printf "${GREEN} → Committing...\e[0m"
 git add .
 git commit -m "$COMMIT"
 echo "-----------------------------"
