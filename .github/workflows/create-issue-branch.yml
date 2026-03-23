@@ -26,9 +26,17 @@ jobs:
         env:
           BRANCH_NAME: ${{ needs.create_issue_branch.outputs.branchName }}
         run: |
+          # 1. Configure the bot user
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # 2. Fetch the newly created branch from the previous job
+          git fetch origin $BRANCH_NAME
+
+          # 3. Check out the branch (now that git knows it exists)
           git checkout $BRANCH_NAME
+
+          # 4. Create and push the empty commit to allow PR creation
           git commit --allow-empty -m "Chore: start PR for issue #${{ github.event.issue.number }}"
           git push origin $BRANCH_NAME
 
