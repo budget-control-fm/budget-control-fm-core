@@ -48,24 +48,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
 
-      - name: Create Empty Commit
-        env:
-          BRANCH_NAME: ${{ needs.create_issue_branch.outputs.branchName }}
-        run: |
-          # 1. Configure the bot user
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-
-          # 2. Fetch the newly created branch from the previous job
-          git fetch origin $BRANCH_NAME
-
-          # 3. Check out the branch (now that git knows it exists)
-          git checkout $BRANCH_NAME
-
-          # 4. Create and push the empty commit to allow PR creation
-          git commit --allow-empty -m "Chore: start PR for issue #${{ github.event.issue.number }} [skip ci]"
-          git push origin $BRANCH_NAME
-
       - name: Create Draft PR and Enable Auto-Merge
         env:
           # Using env vars is the most secure way to handle strings with spaces
