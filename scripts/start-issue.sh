@@ -1,5 +1,7 @@
 #!/bin/bash
 set -e
+GREEN='\033[0;32m'
+NC='\033[0m'
 
 BRANCH=$1
 COMMIT=$2
@@ -9,12 +11,12 @@ if [ -z "$BRANCH" ]; then
   exit 1
 fi
 
-echo "→ Syncing main..."
+printf "${GREEN}→ Syncing main...${NC}\n"
 git checkout main
 git pull origin main
 
-echo "→ Creating branch $BRANCH..."
+printf "${GREEN}→ Creating branch $BRANCH..."
 git checkout -b "$BRANCH"
 
-echo "✓ Ready. Make your changes, then run:"
+printf "${GREEN}✓ Ready. Make your changes, then run:${NC}\n"
 echo "  ./scripts/finish-issue.sh \"$COMMIT\""

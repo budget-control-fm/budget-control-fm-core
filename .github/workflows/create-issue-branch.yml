@@ -13,18 +13,26 @@ jobs:
         id: vars
         shell: bash
         env:
-          # Access the native Issue Type name (e.g., "Bug", "Chore")
+          # Capture all possible metadata
           RAW_TYPE: ${{ github.event.issue.issue_type.name }}
           RAW_TITLE: ${{ github.event.issue.title }}
           ISSUE_NUM: ${{ github.event.issue.number }}
         run: |
-          # Handle the case where Type is not yet set on the issue
-          # Default to 'bugfix' if RAW_TYPE is empty
-          TYPE=$(echo "${RAW_TYPE:-bugfix}" | tr '[:upper:]' '[:lower:]')
+          # 1. Determine Type with a fallback strategy
+          if [ -n "$RAW_TYPE" ] && [ "$RAW_TYPE" != "null" ]; then
+            TYPE=$(echo "$RAW_TYPE" | tr '[:upper:]' '[:lower:]')
+          elif [[ "$RAW_TITLE" =~ [Ff]ix ]]; then
+            TYPE="bugfix"
+          elif [[ "$RAW_TITLE" =~ [Ff]eat ]]; then
+            TYPE="feature"
+          else
+            TYPE="chore" # Ultimate default
+          fi
 
-          # URL-safe title formatting
+          # 2. Clean Title (URL safe)
           CLEAN_TITLE=$(echo "$RAW_TITLE" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g' | sed 's/--*/-/g' | sed 's/^-//;s/-$//')
 
+          # 3. Output the Final Name
           echo "branch_name=${TYPE}/${ISSUE_NUM}-${CLEAN_TITLE}" >> $GITHUB_OUTPUT
 
       - name: Create Branch
