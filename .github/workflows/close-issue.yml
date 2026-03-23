@@ -1,0 +1,28 @@
+name: Cleanup on Issue Close
+on:
+  issues:
+    types: [closed]
+
+jobs:
+  cleanup_resources:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Close PR and Delete Branch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NUM: ${{ github.event.issue.number }}
+        run: |
+          # 1. Find the PR linked to this issue
+          PR_NUMBER=$(gh pr list --search "Closes #$ISSUE_NUM" --json number --jq '.[0].number')
+
+          if [ -n "$PR_NUMBER" ]; then
+            # 2. Close the PR
+            gh pr close "$PR_NUMBER" --comment "Closing PR as the associated issue #$ISSUE_NUM was closed."
+
+            # 3. Delete the remote branch associated with that PR
+            gh pr checkout "$PR_NUMBER"
+            BRANCH_NAME=$(git branch --show-current)
+            git push origin --delete "$BRANCH_NAME"
+          else
+            echo "No linked PR found for issue #$ISSUE_NUM"
+          fi
