@@ -13,16 +13,20 @@ jobs:
           ISSUE_NUM: ${{ github.event.issue.number }}
         run: |
           # 1. Find the PR linked to this issue
-          PR_NUMBER=$(gh pr list --search "Closes #$ISSUE_NUM" --json number --jq '.[0].number')
+          # Using --json headRefName to get the branch name directly
+          PR_DATA=$(gh pr list --search "Closes #$ISSUE_NUM" --json number,headRefName --jq '.[0]')
 
-          if [ -n "$PR_NUMBER" ]; then
-            # 2. Close the PR
+          if [ "$PR_DATA" != "null" ]; then
+            PR_NUMBER=$(echo "$PR_DATA" | jq -r '.number')
+            BRANCH_NAME=$(echo "$PR_DATA" | jq -r '.headRefName')
+
+            echo "Found PR #$PR_NUMBER with branch $BRANCH_NAME"
+
+            # 2. Close the PR via CLI (No git repo needed)
             gh pr close "$PR_NUMBER" --comment "Closing PR as the associated issue #$ISSUE_NUM was closed."
 
-            # 3. Delete the remote branch associated with that PR
-            gh pr checkout "$PR_NUMBER"
-            BRANCH_NAME=$(git branch --show-current)
-            git push origin --delete "$BRANCH_NAME"
+            # 3. Delete the remote branch via API (No git repo needed)
+            gh api -X DELETE "repos/${{ github.repository }}/git/refs/heads/$BRANCH_NAME"
           else
             echo "No linked PR found for issue #$ISSUE_NUM"
           fi
