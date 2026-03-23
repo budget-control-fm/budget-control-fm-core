@@ -9,6 +9,9 @@ jobs:
     outputs:
       branchName: ${{ steps.create_branch.outputs.branchName }}
     steps:
+      - name: Checkout code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+
       - name: Generate Branch Name
         id: vars
         shell: bash
@@ -18,22 +21,11 @@ jobs:
           RAW_TITLE: ${{ github.event.issue.title }}
           ISSUE_NUM: ${{ github.event.issue.number }}
         run: |
-          # 1. Determine Type with a fallback strategy
-          if [ -n "$RAW_TYPE" ] && [ "$RAW_TYPE" != "null" ]; then
-            TYPE=$(echo "$RAW_TYPE" | tr '[:upper:]' '[:lower:]')
-          elif [[ "$RAW_TITLE" =~ [Ff]ix ]]; then
-            TYPE="bugfix"
-          elif [[ "$RAW_TITLE" =~ [Ff]eat ]]; then
-            TYPE="feature"
-          else
-            TYPE="chore" # Ultimate default
-          fi
-
-          # 2. Clean Title (URL safe)
-          CLEAN_TITLE=$(echo "$RAW_TITLE" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g' | sed 's/--*/-/g' | sed 's/^-//;s/-$//')
-
-          # 3. Output the Final Name
-          echo "branch_name=${TYPE}/${ISSUE_NUM}-${CLEAN_TITLE}" >> $GITHUB_OUTPUT
+          # Sanitize the title to create a valid branch name
+          SANITIZED_TITLE=$(echo "$RAW_TITLE" | tr '[:upper:]' '[:lower:]' | tr -cd 'a-z0-9- ' | tr ' ' '-')
+          BRANCH_NAME="issue-${ISSUE_NUM}-${SANITIZED_TITLE}"
+          echo "Generated branch name: $BRANCH_NAME"
+          echo "branchName=$BRANCH_NAME" >> $GITHUB_OUTPUT
 
       - name: Create Branch
         id: create_branch
@@ -47,24 +39,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
-
-      - name: Create Empty Commit
-        env:
-          BRANCH_NAME: ${{ needs.create_issue_branch.outputs.branchName }}
-        run: |
-          # 1. Configure the bot user
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-
-          # 2. Fetch the newly created branch from the previous job
-          git fetch origin $BRANCH_NAME
-
-          # 3. Check out the branch (now that git knows it exists)
-          git checkout $BRANCH_NAME
-
-          # 4. Create and push the empty commit to allow PR creation
-          git commit --allow-empty -m "Chore: start PR for issue #${{ github.event.issue.number }} [skip ci]"
-          git push origin $BRANCH_NAME
 
       - name: Create Draft PR and Enable Auto-Merge
         env:
