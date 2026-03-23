@@ -9,27 +9,27 @@ if [ -z "$COMMIT" ]; then
   exit 1
 fi
 
-echo "→ Running tests..."
+echo -e "\e[32m→ Running tests...\e[0m"
 npm run test:coverage
 echo "-----------------------------"
 echo
 
-echo "→ Running tests..."
+echo -e "\e[32m→ Running tests...\e[0m"
 git pull origin $BRANCH
 echo "-----------------------------"
 echo
 
-echo "→ Committing..."
+echo -e "\e[32m→ Committing...\e[0m"
 git add .
 git commit -m "$COMMIT"
 echo "-----------------------------"
 echo
 
-echo "→ Pushing $BRANCH..."
+echo -e "\e[32m→ Pushing $BRANCH...\e[0m"
 git push -u origin "$BRANCH"
 echo "-----------------------------"
 echo
 
-echo "✓ Done. Open your PR at:"
+echo -e "\e[32m✓ Done. Open your PR at:"
 echo "  https://github.com/budget-control-fm/budget-control-fm-core/compare/$BRANCH"
 echo
