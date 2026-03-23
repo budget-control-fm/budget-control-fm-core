@@ -58,7 +58,7 @@ jobs:
           git commit --allow-empty -m "Chore: start PR for issue #${{ github.event.issue.number }}"
           git push origin $BRANCH_NAME
 
-      - name: Create Draft PR
+      - name: Create Draft PR and Enable Auto-Merge
         env:
           # Using env vars is the most secure way to handle strings with spaces
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -66,9 +66,14 @@ jobs:
           BODY: "Closes #${{ github.event.issue.number }}"
           HEAD: ${{ needs.create_issue_branch.outputs.branchName }}
         run: |
+          # Create the PR first
           gh pr create \
             --draft \
             --title "$TITLE" \
             --body "$BODY" \
             --head "$HEAD" \
             --base main
+
+          # Enable auto-merge for this specific PR
+          # Adjust --squash to --merge or --rebase based on your preference
+          gh pr merge --auto --squash "$HEAD"
