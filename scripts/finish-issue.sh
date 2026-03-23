@@ -9,12 +9,12 @@ if [ -z "$COMMIT" ]; then
   exit 1
 fi
 
-echo -e "\e[32m→ Running tests...\e[0m"
+echo "\e[32m→ Running tests...\e[0m"
 npm run test:coverage
 echo "-----------------------------"
 echo
 
-echo -e "\e[32m→ Running tests...\e[0m"
+echo "\e[32m→ Running tests...\e[0m"
 git pull origin $BRANCH
 echo "-----------------------------"
 echo
