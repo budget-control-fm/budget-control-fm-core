@@ -12,6 +12,9 @@ fi
 echo "→ Running tests..."
 npm run test:coverage
 
+echo "\n→ Running tests..."
+git pull origin $BRANCH
+
 echo "→ Committing..."
 git add .
 git commit -m "$COMMIT"
