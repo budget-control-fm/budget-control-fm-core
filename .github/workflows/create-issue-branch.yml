@@ -55,7 +55,7 @@ jobs:
           git checkout $BRANCH_NAME
 
           # 4. Create and push the empty commit to allow PR creation
-          git commit --allow-empty -m "Chore: start PR for issue #${{ github.event.issue.number }}"
+          git commit --allow-empty -m "Chore: start PR for issue #${{ github.event.issue.number }} [skip ci]"
           git push origin $BRANCH_NAME
 
       - name: Create Draft PR and Enable Auto-Merge
