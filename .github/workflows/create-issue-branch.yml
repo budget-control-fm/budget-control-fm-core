@@ -59,16 +59,16 @@ jobs:
           git push origin $BRANCH_NAME
 
       - name: Create Draft PR
-        # FIX: Assign untrusted data to env variables first
         env:
+          # Using env vars is the most secure way to handle strings with spaces
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          ISSUE_TITLE: ${{ github.event.issue.title }}
-          ISSUE_NUMBER: ${{ github.event.issue.number }}
-          BRANCH_NAME: ${{ needs.create_issue_branch.outputs.branchName }}
+          TITLE: "[#${{ github.event.issue.number }}] ${{ github.event.issue.title }}"
+          BODY: "Closes #${{ github.event.issue.number }}"
+          HEAD: ${{ needs.create_issue_branch.outputs.branchName }}
         run: |
           gh pr create \
             --draft \
-            "[#$ISSUE_NUMBER] $ISSUE_TITLE" \
-            --body "Closes #$ISSUE_NUMBER" \
-            --head "$BRANCH_NAME" \
+            --title "$TITLE" \
+            --body "$BODY" \
+            --head "$HEAD" \
             --base main
