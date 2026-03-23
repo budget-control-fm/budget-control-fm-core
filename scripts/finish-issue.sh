@@ -1,5 +1,7 @@
 #!/bin/bash
 set -e
+GREEN='\033[0;32m'
+NC='\033[0m'
 
 COMMIT=$1
 BRANCH=$(git rev-parse --abbrev-ref HEAD)
@@ -9,27 +11,27 @@ if [ -z "$COMMIT" ]; then
   exit 1
 fi
 
-echo "\e[32m→ Running tests...\e[0m"
+printf "${GREEN} Running tests...${NC}\n"
 npm run test:coverage
 echo "-----------------------------"
 echo
 
-echo "\e[32m→ Running tests...\e[0m"
+printf "${GREEN} Running tests...${NC}\n"
 git pull origin $BRANCH
 echo "-----------------------------"
 echo
 
-echo -e "\e[32m→ Committing...\e[0m"
+printf "${GREEN} → Committing...${NC}\n"
 git add .
 git commit -m "$COMMIT"
 echo "-----------------------------"
 echo
 
-echo -e "\e[32m→ Pushing $BRANCH...\e[0m"
+printf "${GREEN} → Pushing $BRANCH...${NC}\n"
 git push -u origin "$BRANCH"
 echo "-----------------------------"
 echo
 
-echo -e "\e[32m✓ Done. Open your PR at:"
+printf "${GREEN} ✓ Done. Open your PR at:${NC}\n"
 echo "  https://github.com/budget-control-fm/budget-control-fm-core/compare/$BRANCH"
 echo
