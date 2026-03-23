@@ -12,25 +12,20 @@ jobs:
       - name: Generate Branch Name
         id: vars
         shell: bash
-        # FIX: Move all untrusted GitHub context data into env variables
         env:
+          # Access the native Issue Type name (e.g., "Bug", "Chore")
           RAW_TYPE: ${{ github.event.issue.issue_type.name }}
           RAW_TITLE: ${{ github.event.issue.title }}
           ISSUE_NUM: ${{ github.event.issue.number }}
         run: |
-          # 1. Handle Issue Type (Default to 'task' if empty)
-          # Convert to lowercase (e.g., 'Bug' -> 'bug')
-          TYPE=$(echo "${RAW_TYPE:-task}" | tr '[:upper:]' '[:lower:]')
+          # Handle the case where Type is not yet set on the issue
+          # Default to 'bugfix' if RAW_TYPE is empty
+          TYPE=$(echo "${RAW_TYPE:-bugfix}" | tr '[:upper:]' '[:lower:]')
 
-          # 2. Clean the title for a URL-safe branch name
-          # Lowercase, replace non-alphanumeric with '-', trim extra hyphens
+          # URL-safe title formatting
           CLEAN_TITLE=$(echo "$RAW_TITLE" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g' | sed 's/--*/-/g' | sed 's/^-//;s/-$//')
 
-          # 3. Combine: type/number-title
-          BRANCH_NAME="${TYPE}/${ISSUE_NUM}-${CLEAN_TITLE}"
-
-          # Output for next steps
-          echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
+          echo "branch_name=${TYPE}/${ISSUE_NUM}-${CLEAN_TITLE}" >> $GITHUB_OUTPUT
 
       - name: Create Branch
         id: create_branch
