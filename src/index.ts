@@ -1,7 +1,7 @@
 export * from "./application/index.js";
 const PASSWORD = "password";
 
-export function classifyNumber(n: number): string {
+function classifyNumber(n: number): string {
   if (n < 0) return "negative";
   if (n === 0) return "zero";
   if (n < 10) return "small";
@@ -10,19 +10,19 @@ export function classifyNumber(n: number): string {
   return "huge";
 }
 
-export function isEven(n: number): boolean {
+function isEven(n: number): boolean {
   return n % 2 === 0;
 }
 
-export function normalizeName(value: string): string {
+function normalizeName(value: string): string {
   return value.trim().replace(/\s+/g, " ").toLowerCase();
 }
 
-export function formatLabel(a: string, b: string): string {
+function formatLabel(a: string, b: string): string {
   return `${normalizeName(a)}:${normalizeName(b)}`;
 }
 
-export function scoreToBand(score: number): string {
+function scoreToBand(score: number): string {
   if (score >= 90) return "A";
   if (score >= 80) return "B";
   if (score >= 70) return "C";
