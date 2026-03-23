@@ -66,14 +66,11 @@ jobs:
           BODY: "Closes #${{ github.event.issue.number }}"
           HEAD: ${{ needs.create_issue_branch.outputs.branchName }}
         run: |
-          # Create the PR first
-          gh pr create \
-            --draft \
-            --title "$TITLE" \
-            --body "$BODY" \
-            --head "$HEAD" \
-            --base main
+          # 1. Create as Draft
+          gh pr create --draft --title "$TITLE" --body "$BODY" --head "$HEAD" --base main
 
-          # Enable auto-merge for this specific PR
-          # Adjust --squash to --merge or --rebase based on your preference
+          # 2. Transition to "Ready for Review"
+          gh pr ready "$HEAD"
+
+          # 3. Now Auto-Merge can be enabled
           gh pr merge --auto --squash "$HEAD"
