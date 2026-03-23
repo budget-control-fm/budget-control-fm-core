@@ -1,0 +1,9 @@
+# .github/issue-branch.yml
+branchName: "full" # Format: prefix/issue-number-title
+prefixes:
+  - label: "bug"
+    prefix: "bug/"
+  - label: "feature"
+    prefix: "feature/"
+  - label: "chore"
+    prefix: "chore/"

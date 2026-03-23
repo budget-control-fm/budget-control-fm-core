@@ -1,0 +1,38 @@
+name: Create Issue Branch & Draft PR
+on:
+  issues:
+    types: [assigned]
+
+jobs:
+  create_issue_branch:
+    runs-on: ubuntu-latest
+    outputs:
+      branchName: ${{ steps.create_branch.outputs.branchName }}
+    steps:
+      - name: Create Branch
+        id: create_branch
+        uses: robvanderleek/create-issue-branch@main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  create_draft_pr:
+    needs: create_issue_branch
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create Draft PR
+        # FIX: Assign untrusted data to env variables first
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          BRANCH_NAME: ${{ needs.create_issue_branch.outputs.branchName }}
+        run: |
+          gh pr create \
+            --draft \
+            --title "$ISSUE_TITLE" \
+            --body "Closes #$ISSUE_NUMBER" \
+            --head "$BRANCH_NAME" \
+            --base main
