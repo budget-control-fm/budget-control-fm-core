@@ -1,5 +1,7 @@
 #!/bin/bash
 set -e
+GREEN='\033[0;32m'
+NC='\033[0m'
 
 COMMIT=$1
 BRANCH=$(git rev-parse --abbrev-ref HEAD)
@@ -9,12 +11,12 @@ if [ -z "$COMMIT" ]; then
   exit 1
 fi
 
-printf "${GREEN} Running tests...\e[0m"
+printf "${GREEN} Running tests...${NC}\n"
 npm run test:coverage
 echo "-----------------------------"
 echo
 
-echo "\e[32m→ Running tests...\e[0m"
+echo "\e[32m→ Running tests..."
 git pull origin $BRANCH
 echo "-----------------------------"
 echo
