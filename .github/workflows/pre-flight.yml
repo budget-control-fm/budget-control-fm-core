@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - feature/**
-      - bugfix/**
+      - fix/**
       - hotfix/**
       - chore/**
       - docs/**
