@@ -2,7 +2,7 @@ name: Create linked branch from issue type
 
 on:
   issues:
-    types: [opened, edited, reopened]
+    types: [assigned]
 
 permissions:
   contents: write
