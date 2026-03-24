@@ -35,12 +35,8 @@ jobs:
                     }
                   }
                   defaultBranchRef {
+                    id
                     name
-                    target {
-                      ... on Commit {
-                        oid
-                      }
-                    }
                   }
                 }
               }
