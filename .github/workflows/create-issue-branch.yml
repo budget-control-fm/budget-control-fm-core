@@ -1,57 +1,177 @@
-name: Create Issue Branch & Draft PR
+name: Create branch from issue type
+
 on:
   issues:
-    types: [assigned]
+    types: [opened, edited, reopened]
+
+permissions:
+  contents: write
+  issues: write
 
 jobs:
-  create_issue_branch:
+  create-branch:
+    name: create branch from issue type
     runs-on: ubuntu-latest
-    outputs:
-      branchName: ${{ steps.create_branch.outputs.branchName }}
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Resolve issue type and branch name
+        id: resolve
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
+        with:
+          script: |
+            const issueNumber = context.payload.issue.number;
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
 
-      - name: Generate Branch Name
-        id: vars
-        shell: bash
+            const query = `
+              query($owner: String!, $repo: String!, $issueNumber: Int!) {
+                repository(owner: $owner, name: $repo) {
+                  issue(number: $issueNumber) {
+                    number
+                    title
+                    issueType {
+                      name
+                    }
+                  }
+                  defaultBranchRef {
+                    name
+                    target {
+                      ... on Commit {
+                        oid
+                      }
+                    }
+                  }
+                }
+              }
+            `;
+
+            const result = await github.graphql(query, {
+              owner,
+              repo,
+              issueNumber,
+            });
+
+            const issue = result.repository.issue;
+            if (!issue) {
+              core.setFailed(`Issue #${issueNumber} not found.`);
+              return;
+            }
+
+            const issueTypeName = (issue.issueType?.name || "").toLowerCase().trim();
+
+            const typeMap = {
+              feature: "feature",
+              bug: "bugfix",
+              task: "chore",
+              chore: "chore",
+              hotfix: "hotfix",
+            };
+
+            const branchType = typeMap[issueTypeName];
+
+            if (!branchType) {
+              core.setOutput("should_create", "false");
+              core.setOutput("reason", `Unsupported or missing issue type: "${issueTypeName || "none"}"`);
+              return;
+            }
+
+            const slug = issue.title
+              .toLowerCase()
+              .normalize("NFKD")
+              .replace(/[\u0300-\u036f]/g, "")
+              .replace(/[^a-z0-9\s-]/g, "")
+              .trim()
+              .replace(/\s+/g, "-")
+              .replace(/-+/g, "-")
+              .replace(/^-|-$/g, "");
+
+            const branchName = `${branchType}/${issue.number}-${slug}`;
+            const defaultBranch = result.repository.defaultBranchRef.name;
+            const defaultSha = result.repository.defaultBranchRef.target.oid;
+
+            core.setOutput("should_create", "true");
+            core.setOutput("branch_name", branchName);
+            core.setOutput("default_branch", defaultBranch);
+            core.setOutput("default_sha", defaultSha);
+            core.setOutput("issue_type", issueTypeName);
+
+      - name: Skip if issue type is missing or unsupported
+        if: steps.resolve.outputs.should_create != 'true'
+        run: echo "${{ steps.resolve.outputs.reason }}"
+
+      - name: Check whether branch already exists
+        if: steps.resolve.outputs.should_create == 'true'
+        id: exists
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
         env:
-          # Capture all possible metadata
-          RAW_TYPE: ${{ github.event.issue.issue_type.name }}
-          RAW_TITLE: ${{ github.event.issue.title }}
-          ISSUE_NUM: ${{ github.event.issue.number }}
-        run: |
-          # Sanitize the title to create a valid branch name
-          SANITIZED_TITLE=$(echo "$RAW_TITLE" | tr '[:upper:]' '[:lower:]' | tr -cd 'a-z0-9- ' | tr ' ' '-')
-          BRANCH_NAME="issue-${ISSUE_NUM}-${SANITIZED_TITLE}"
-          echo "Generated branch name: $BRANCH_NAME"
-          echo "branchName=$BRANCH_NAME" >> $GITHUB_OUTPUT
+          BRANCH_NAME: ${{ steps.resolve.outputs.branch_name }}
+        with:
+          script: |
+            const branch = process.env.BRANCH_NAME;
 
-      - name: Create Branch
-        id: create_branch
-        uses: robvanderleek/create-issue-branch@dfe19372d9a9198999c0fd8a81f0dbe00951afd9
+            try {
+              await github.rest.git.getRef({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                ref: `heads/${branch}`,
+              });
+              core.setOutput("exists", "true");
+            } catch (error) {
+              if (error.status === 404) {
+                core.setOutput("exists", "false");
+              } else {
+                throw error;
+              }
+            }
+
+      - name: Create branch
+        if: steps.resolve.outputs.should_create == 'true' && steps.exists.outputs.exists != 'true'
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH_NAME: ${{ steps.resolve.outputs.branch_name }}
+          DEFAULT_SHA: ${{ steps.resolve.outputs.default_sha }}
+        with:
+          script: |
+            await github.rest.git.createRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: `refs/heads/${process.env.BRANCH_NAME}`,
+              sha: process.env.DEFAULT_SHA,
+            });
 
-  create_draft_pr:
-    needs: create_issue_branch
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
-
-      - name: Create Draft PR and Enable Auto-Merge
+      - name: Comment on issue
+        if: steps.resolve.outputs.should_create == 'true'
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
         env:
-          # Using env vars is the most secure way to handle strings with spaces
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TITLE: "[#${{ github.event.issue.number }}] ${{ github.event.issue.title }}"
-          BODY: "Closes #${{ github.event.issue.number }}"
-          HEAD: ${{ needs.create_issue_branch.outputs.branchName }}
-        run: |
-          # Create the PR first
-          gh pr create \
-            --draft \
-            --title "$TITLE" \
-            --body "$BODY" \
-            --head "$HEAD" \
-            --base main
+          BRANCH_NAME: ${{ steps.resolve.outputs.branch_name }}
+          BRANCH_EXISTS: ${{ steps.exists.outputs.exists }}
+          ISSUE_TYPE: ${{ steps.resolve.outputs.issue_type }}
+          DEFAULT_BRANCH: ${{ steps.resolve.outputs.default_branch }}
+        with:
+          script: |
+            const branch = process.env.BRANCH_NAME;
+            const exists = process.env.BRANCH_EXISTS === "true";
+            const issueType = process.env.ISSUE_TYPE;
+            const defaultBranch = process.env.DEFAULT_BRANCH;
+
+            const body = exists
+              ? `Branch already exists for this ${issueType} issue: \`${branch}\``
+              : [
+                  `Created branch from issue type **${issueType}**: \`${branch}\``,
+                  ``,
+                  `Base branch: \`${defaultBranch}\``,
+                  ``,
+                  `Use locally:`,
+                  ``,
+                  "```bash",
+                  "git fetch origin",
+                  `git checkout ${branch}`,
+                  "```",
+                ].join("\n");
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.issue.number,
+              body,
+            });
