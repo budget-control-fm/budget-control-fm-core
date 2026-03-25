@@ -1,5 +1,5 @@
 import { jest } from "@jest/globals";
-import type { User } from "../../../../src/domain/user/entities/user.entity.js";
+import type { User } from "../../../../src/user/domain/entities/user.entity.js";
 import { RegisterUserUseCase } from "../../../../src/user/application/use-cases/register-user.use-case.js";
 import type { AuthServicePort } from "../../../../src/user/application/ports/outbound/auth-service.port.js";
 import type { UserProfileRepositoryPort } from "../../../../src/user/application/ports/outbound/user-profile-repository.port.js";
