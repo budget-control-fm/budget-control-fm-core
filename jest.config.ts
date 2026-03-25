@@ -4,7 +4,7 @@ const config: Config = {
   preset: "ts-jest/presets/default-esm",
   coverageProvider: "v8",
   testEnvironment: "node",
-  testMatch: ["<rootDir>/tests/**/*.test.ts"],
+  testMatch: ["<rootDir>/test/unit/**/*.test.ts"],
   extensionsToTreatAsEsm: [".ts"],
   passWithNoTests: false,
   transform: {
@@ -20,6 +20,7 @@ const config: Config = {
     "!src/**/*.port.ts",
     "!src/**/index.ts",
   ],
+  roots: ["<rootDir>/test/unit"],
   coverageReporters: ["text", "lcov"],
   coverageDirectory: "coverage",
   coverageThreshold: {
@@ -29,9 +30,6 @@ const config: Config = {
       lines: 90,
       statements: 90,
     },
-  },
-  testEnvironmentOptions: {
-    env: { TZ: "America/Sao_Paulo" },
   },
 };
 

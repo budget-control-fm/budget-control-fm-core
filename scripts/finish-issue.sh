@@ -10,6 +10,15 @@ if [ -z "$COMMIT" ]; then
   echo "Usage: ./scripts/finish-issue.sh <commit-message>"
   exit 1
 fi
+printf "${GREEN} Building...${NC}\n"
+npm run build
+echo "-----------------------------"
+echo
+
+printf "${GREEN} Running typecheck...${NC}\n"
+npm run typecheck
+echo "-----------------------------"
+echo
 
 printf "${GREEN} Running tests...${NC}\n"
 npm run test:coverage
