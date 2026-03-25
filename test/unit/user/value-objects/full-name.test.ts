@@ -1,4 +1,4 @@
-import { FullName } from "../../../src/user/domain/value-objects/full-name.vo.js";
+import { FullName } from "../../../../src/user/domain/value-objects/full-name.vo.js";
 
 describe("FullName.of()", () => {
   describe("valid inputs", () => {

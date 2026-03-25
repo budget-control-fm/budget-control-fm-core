@@ -1,4 +1,4 @@
-import { IsoDate } from "../../../../src/kernel/domain/value-objects/iso-date.vo.js";
+import { IsoDate } from "../../../../../src/kernel/domain/value-objects/iso-date.vo.js";
 
 describe("IsoDate.of()", () => {
   describe("valid inputs", () => {

@@ -1,4 +1,4 @@
-import { Uuid } from "../../../../src/kernel/domain/value-objects/uuid.vo.js";
+import { Uuid } from "../../../../../src/kernel/domain/value-objects/uuid.vo.js";
 
 // Dummy domain types for branded UUID tests
 type User = { readonly _brand: "User" };

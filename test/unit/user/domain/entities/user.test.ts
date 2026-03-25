@@ -1,8 +1,8 @@
-import { User } from "../../../../src/user/domain/entities/user.entity.js";
-import { UserId } from "../../../../src/user/domain/value-objects/user-id.vo.js";
-import { FullName } from "../../../../src/user/domain/value-objects/full-name.vo.js";
-import { Email } from "../../../../src/kernel/domain/value-objects/email.vo.js";
-import { IsoDate } from "../../../../src/kernel/domain/value-objects/iso-date.vo.js";
+import { User } from "../../../../../src/user/domain/entities/user.entity.js";
+import { UserId } from "../../../../../src/user/domain/value-objects/user-id.vo.js";
+import { FullName } from "../../../../../src/user/domain/value-objects/full-name.vo.js";
+import { Email } from "../../../../../src/kernel/domain/value-objects/email.vo.js";
+import { IsoDate } from "../../../../../src/kernel/domain/value-objects/iso-date.vo.js";
 
 const VALID_USER_ID = "550e8400-e29b-41d4-a716-446655440000";
 

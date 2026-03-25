@@ -1,4 +1,4 @@
-import { Email } from "../../../../src/kernel/domain/value-objects/email.vo.js";
+import { Email } from "../../../../../src/kernel/domain/value-objects/email.vo.js";
 
 describe("Email.of()", () => {
   describe("valid inputs", () => {

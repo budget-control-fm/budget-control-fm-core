@@ -1,11 +1,11 @@
 import { jest } from "@jest/globals";
-import type { User } from "../../../../src/user/domain/entities/user.entity.js";
-import { RegisterUserUseCase } from "../../../../src/user/application/use-cases/register-user.use-case.js";
-import type { AuthServicePort } from "../../../../src/user/application/ports/outbound/auth-service.port.js";
-import type { UserProfileRepositoryPort } from "../../../../src/user/application/ports/outbound/user-profile-repository.port.js";
-import type { IdGeneratorPort } from "../../../../src/kernel/application/ports/outbound/id-generator.port.js";
-import type { ClockPort } from "../../../../src/kernel/application/ports/outbound/clock.port.js";
-import type { RegisterUserCommand } from "../../../../src/user/application/types/register-user.types.js";
+import type { User } from "../../../../../src/user/domain/entities/user.entity.js";
+import { RegisterUserUseCase } from "../../../../../src/user/application/use-cases/register-user.use-case.js";
+import type { AuthServicePort } from "../../../../../src/user/application/ports/outbound/auth-service.port.js";
+import type { UserProfileRepositoryPort } from "../../../../../src/user/application/ports/outbound/user-profile-repository.port.js";
+import type { IdGeneratorPort } from "../../../../../src/kernel/application/ports/outbound/id-generator.port.js";
+import type { ClockPort } from "../../../../../src/kernel/application/ports/outbound/clock.port.js";
+import type { RegisterUserCommand } from "../../../../../src/user/application/types/register-user.types.js";
 
 const VALID_USER_ID = "550e8400-e29b-41d4-a716-446655440000";
 const FIXED_DATE = "2024-01-15";

@@ -10,8 +10,8 @@
   },
   "exports": {
     "./user": {
-      "import": "./dist/application/user/index.js",
-      "types": "./dist/application/user/index.d.ts"
+      "import": "./dist/user/index.js",
+      "types": "./dist/user/index.d.ts"
     }
   },
   "files": [
@@ -20,7 +20,6 @@
     "LICENSE"
   ],
   "scripts": {
-    "dev": "tsx src/index.ts",
     "prebuild": "npm run clean",
     "build": "tsc -p tsconfig.build.json",
     "build:watch": "tsc -watch -p tsconfig.build.json",

@@ -1,4 +1,4 @@
-import { Amount } from "../../../../src/kernel/domain/value-objects/amount.vo.js";
+import { Amount } from "../../../../../src/kernel/domain/value-objects/amount.vo.js";
 
 describe("Amount.of()", () => {
   describe("valid inputs", () => {
