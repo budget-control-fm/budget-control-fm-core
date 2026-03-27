@@ -9,5 +9,5 @@
     "declarationMap": true
   },
   "files": ["src/user/index.ts"],
-  "exclude": ["tests", "node_modules", "dist", "**/*.test.ts"]
+  "exclude": ["test", "node_modules", "dist", "**/*.test.ts"]
 }
