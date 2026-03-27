@@ -1,23 +1,33 @@
 import { RegisterUserUseCase } from "budget-control-fm-core/user";
 
-const useCase = new RegisterUserUseCase({
-  authService: {
-    hashPassword: async () => "hashed-password",
-  },
-  userProfileRepository: {
-    existsByEmail: async () => false,
-    save: async () => {},
-  },
-  idGenerator: {
-    generate: () => "123e4567-e89b-12d3-a456-426614174000",
-  },
-  clock: {
-    now: () => new Date("2026-01-01T00:00:00.000Z"),
-  },
-});
+const idGenerator = {
+  generate: () => "123e4567-e89b-42d3-a456-426614174000",
+};
+
+const clock = {
+  today: () => "2026-01-01",
+};
+
+const authService = {
+  registerUser: async () => {},
+};
+
+const userProfileRepository = {
+  save: async () => {},
+};
+
+const useCase = new RegisterUserUseCase(
+  idGenerator,
+  clock,
+  authService,
+  userProfileRepository,
+);
 
 await useCase.execute({
   fullName: "Fabio Moggi",
   email: "fabio@example.com",
+  birthDate: "1990-01-01",
   password: "strong-password",
 });
+
+console.log("ESM smoke test passed");
