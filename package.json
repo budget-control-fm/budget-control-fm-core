@@ -11,7 +11,8 @@
   "exports": {
     "./user": {
       "import": "./dist/user/index.js",
-      "types": "./dist/user/index.d.ts"
+      "types": "./dist/user/index.d.ts",
+      "default": "./dist/user/index.js"
     }
   },
   "files": [
@@ -35,7 +36,8 @@
     "prepack": "npm run build",
     "changeset": "changeset",
     "version-packages": "changeset version",
-    "release": "changeset publish"
+    "release": "changeset publish",
+    "smoke": "node ./test/smoke/smoke.mjs"
   },
   "repository": {
     "type": "git",
