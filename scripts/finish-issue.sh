@@ -30,6 +30,11 @@ git pull origin $BRANCH
 echo "-----------------------------"
 echo
 
+printf "${GREEN} Running smoke tests...${NC}\n"
+npm run smoke
+echo "-----------------------------"
+echo
+
 printf "${GREEN} → Committing...${NC}\n"
 git add .
 git commit -m "$COMMIT"
