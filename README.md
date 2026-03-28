@@ -268,3 +268,4 @@ npm run lint && npm run typecheck && npm test && npm run smoke
 ## License
 
 ISC
+.
