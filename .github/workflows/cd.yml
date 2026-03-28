@@ -16,7 +16,7 @@ permissions:
 
 jobs:
   release:
-    name: version bump or release
+    name: Version bump or Release
     runs-on: ubuntu-latest
 
     steps:
