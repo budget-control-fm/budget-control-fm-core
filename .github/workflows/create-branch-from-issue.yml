@@ -16,7 +16,7 @@ jobs:
     steps:
       - name: Resolve issue metadata
         id: resolve
-        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd
         with:
           script: |
             const issueNumber = context.payload.issue.number;
@@ -95,7 +95,7 @@ jobs:
       - name: Resolve default branch SHA
         if: steps.resolve.outputs.should_create == 'true'
         id: base
-        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd
         with:
           script: |
             const owner = context.repo.owner;
@@ -120,7 +120,7 @@ jobs:
       - name: Create linked branch
         if: steps.resolve.outputs.should_create == 'true'
         id: linked_branch
-        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd
         env:
           ISSUE_ID: ${{ steps.resolve.outputs.issue_id }}
           BRANCH_NAME: ${{ steps.resolve.outputs.branch_name }}
@@ -173,7 +173,7 @@ jobs:
 
       - name: Comment on issue
         if: steps.resolve.outputs.should_create == 'true'
-        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd
         env:
           BRANCH_NAME: ${{ steps.linked_branch.outputs.final_branch_name }}
           CREATED: ${{ steps.linked_branch.outputs.created }}
