@@ -1,4 +1,4 @@
-name: Create linked branch from issue type
+name: Create branch from issue
 
 on:
   issues:
