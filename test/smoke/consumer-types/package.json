@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc -p tsconfig.published.json --noEmit"
   },
   "devDependencies": {
     "typescript": "^5.8.0"
