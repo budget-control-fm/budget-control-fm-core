@@ -15,7 +15,7 @@ concurrency:
 
 jobs:
   push:
-    name: Branch Code Ready For Review
+    name: Code Ready For Review
     runs-on: ubuntu-latest
 
     steps:
