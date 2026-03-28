@@ -1,4 +1,4 @@
-name: Pre-flight
+name: Branch Validation
 
 on:
   push:
@@ -15,7 +15,7 @@ concurrency:
 
 jobs:
   push:
-    name: code ready for review
+    name: Branch Code Ready For Review
     runs-on: ubuntu-latest
 
     steps:
