@@ -1,5 +1,11 @@
 # budget-control-fm-core
 
+## 0.5.0
+
+### Minor Changes
+
+- ffccf15: updated user use cases
+
 ## 0.4.0
 
 ### Minor Changes
