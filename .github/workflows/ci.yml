@@ -15,9 +15,8 @@ concurrency:
 
 jobs:
   validate:
-    name: Code Ready to Merge to Main
+    name: Validate PR
     if: github.head_ref != 'changeset-release/main'
-
     runs-on: ubuntu-latest
 
     steps:
