@@ -1,4 +1,4 @@
-name: Branch
+name: Pre-Flight
 
 on:
   push:
@@ -14,15 +14,15 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  push:
-    name: Code Ready For Review
+  preflight:
+    name: Validate Branch
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
 
-      - name: Setup Node
+      - name: Set up Node.js
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
           node-version: 24
@@ -34,14 +34,36 @@ jobs:
       - name: Lint
         run: npm run lint
 
-      - name: Type check
+      - name: Type-check
         run: npm run typecheck
 
       - name: Test
         run: npm test
 
-      - name: Smoke test
+      - name: Smoke-test
         run: npm run smoke
 
       - name: Build
         run: npm run build
+
+  open-pr:
+    name: Open Pull Request
+    needs: preflight
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+
+      - name: Open PR
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr create \
+            --base main \
+            --head "${{ github.ref_name }}" \
+            --title "${{ github.ref_name }}" \
+            --body "Pre-flight checks passed. Ready for review." \
+          || echo "PR already exists, skipping."
