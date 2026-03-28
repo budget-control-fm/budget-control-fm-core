@@ -16,6 +16,7 @@ const userProfileRepository = {
   save: async () => {},
 };
 
+/** @type {import("budget-control-fm-core/user").RegisterUserUseCase} */
 const useCase = new RegisterUserUseCase(
   idGenerator,
   clock,
@@ -23,6 +24,7 @@ const useCase = new RegisterUserUseCase(
   userProfileRepository,
 );
 
+/** @type {import("budget-control-fm-core/user").RegisterUserCommand} */
 await useCase.execute({
   fullName: "Fabio Moggi",
   email: "fabio@example.com",
@@ -30,4 +32,4 @@ await useCase.execute({
   password: "strong-password",
 });
 
-console.log("ESM smoke test passed");
+console.log(" *** ESM smoke test passed ***");
