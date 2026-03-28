@@ -54,7 +54,7 @@ jobs:
 
             const typeMap = {
               feature: "feature",
-              bug: "fix",
+              fix: "fix",
               task: "chore",
               chore: "chore",
               hotfix: "hotfix",
