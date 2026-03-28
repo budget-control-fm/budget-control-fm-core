@@ -31,6 +31,9 @@ jobs:
       - name: Install dependencies
         run: npm ci --ignore-scripts
 
+      - name: Audit dependencies
+        run: npm audit --audit-level=high --omit=dev
+
       - name: Lint
         run: npm run lint
 
@@ -45,25 +48,3 @@ jobs:
 
       - name: Build
         run: npm run build
-
-  open-pr:
-    name: Open Pull Request
-    needs: preflight
-    runs-on: ubuntu-latest
-    permissions:
-      pull-requests: write
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
-
-      - name: Open PR
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh pr create \
-            --base main \
-            --head "${{ github.ref_name }}" \
-            --title "${{ github.ref_name }}" \
-            --body "Pre-flight checks passed. Ready for review." \
-          || echo "PR already exists, skipping."
