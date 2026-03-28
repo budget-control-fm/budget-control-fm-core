@@ -1,4 +1,4 @@
-name: CD
+name: Version Packages
 
 on:
   push:
@@ -6,17 +6,17 @@ on:
       - main
 
 concurrency:
-  group: continuous-delivery
+  group: version-packages
   cancel-in-progress: true
 
 permissions:
   contents: write
-  id-token: write
+  pull-requests: write
 
 jobs:
-  publish:
-    name: Publish to npm
-    if: startsWith(github.event.head_commit.message, 'Version Packages')
+  version:
+    name: Bump Version
+    if: "!startsWith(github.event.head_commit.message, 'Version Packages')"
     runs-on: ubuntu-latest
 
     steps:
@@ -31,21 +31,13 @@ jobs:
         with:
           node-version: 24
           cache: npm
-          registry-url: "https://registry.npmjs.org"
 
       - name: Install dependencies
         run: npm ci --ignore-scripts
 
-      - name: Build
-        run: npm run build
-
-      - name: Smoke-test
-        run: npm run smoke
-
-      - name: Publish to npm
+      - name: Bump version
         uses: changesets/action@e87c8ed249971350e47fab7515075f44eb134e5b
         with:
-          publish: npm run release
+          version: npm run version-packages
         env:
           GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
