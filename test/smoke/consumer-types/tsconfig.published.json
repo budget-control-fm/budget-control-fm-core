@@ -5,11 +5,7 @@
     "moduleResolution": "NodeNext",
     "strict": true,
     "noEmit": true,
-    "skipLibCheck": false,
-    "baseUrl": ".",
-    "paths": {
-      "budget-control-fm-core/user": ["../../../src/user/index.ts"]
-    }
+    "skipLibCheck": false
   },
   "include": ["*.ts"]
 }

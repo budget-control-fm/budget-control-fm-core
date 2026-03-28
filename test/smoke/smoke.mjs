@@ -1,3 +1,4 @@
+// test/smoke/smoke.mjs
 import { execSync } from "node:child_process";
 import { cpSync, existsSync, mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -17,6 +18,10 @@ function run(command, cwd) {
 }
 
 function copyDir(src, dest) {
+  if (!existsSync(src)) {
+    throw new Error(`Smoke fixture directory not found: ${src}`);
+  }
+
   cpSync(src, dest, { recursive: true });
 }
 
@@ -28,10 +33,8 @@ function installPackedPackage(consumerDir, tarballPath) {
 let tarballPath;
 
 try {
-  // 1. Build the real publishable package
   run("npm run build", repoRoot);
 
-  // 2. Pack it exactly as npm would publish it
   const packOutput = execSync("npm pack", {
     cwd: repoRoot,
     encoding: "utf8",
@@ -44,22 +47,25 @@ try {
     throw new Error(`Tarball not found: ${tarballPath}`);
   }
 
-  // 3. Run TypeScript consumer smoke test
   {
     const src = join(repoRoot, "test", "smoke", "consumer-types");
-    const dest = join(tempRoot, "test", "smoke", "consumer-types");
+    const dest = join(tempRoot, "consumer-types");
     copyDir(src, dest);
     installPackedPackage(dest, tarballPath);
     run("npm run typecheck", dest);
   }
 
-  // 4. Run ESM runtime consumer smoke test
   {
-    const src = join(repoRoot, "test", "smoke", "consumer");
-    const dest = join(tempRoot, "test", "smoke", "consumer");
+    const src = join(repoRoot, "test", "smoke", "consumer-esm");
+    const dest = join(tempRoot, "consumer-esm");
     copyDir(src, dest);
+
+    const fixturesSrc = join(repoRoot, "test", "smoke", "fixtures");
+    const fixturesDest = join(dest, "fixtures");
+    copyDir(fixturesSrc, fixturesDest);
+
     installPackedPackage(dest, tarballPath);
-    run("node index.mjs", dest);
+    run("node register-user.mjs", dest);
   }
 
   console.log("All ESM smoke tests passed");
