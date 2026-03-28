@@ -2,7 +2,7 @@
 
 Shared domain logic and application primitives for the Budget Control Financial Management ecosystem.
 
-This package provides reusable value objects, entities, and use cases consumed by services such as ingestion pipelines, classification engines, and API adapters. It is designed around hexagonal architecture — domain logic is pure and infrastructure-free; adapters are implemented by the consuming service, not here.
+This package provides reusable value objects, entities, and use cases consumed by services such as ingestion pipelines, classification engines, and API adapters. It is designed around hexagonal architecture: domain logic is pure and infrastructure-free; adapters are implemented by the consuming service, not here.
 
 This package is **ESM-only**.
 
@@ -13,7 +13,7 @@ This package is **ESM-only**.
 - Node.js **24 or later**
 - An **ESM-compatible environment** (`"type": "module"` in your `package.json`, or `.mjs` files)
 
-If your project still uses CommonJS you must migrate to ESM before using this library.
+If your project still uses CommonJS, you must migrate to ESM before using this library.
 
 ---
 
@@ -31,13 +31,13 @@ This package exposes a **subpath-only API**. There is no root `budget-control-fm
 
 ```ts
 // ✅ correct
-import { RegisterUserUseCase } from 'budget-control-fm-core/user';
+import { RegisterUserUseCase } from "budget-control-fm-core/user";
 
 // ❌ will throw ERR_PACKAGE_PATH_NOT_EXPORTED
-import { ... } from 'budget-control-fm-core';
+import { ... } from "budget-control-fm-core";
 ```
 
-This is intentional. As the library grows across domains (user, transaction, budget, …) each subpath forms an independent module boundary. Only import the domain you actually depend on.
+This is intentional. As the library grows across domains (`user`, `transaction`, `budget`, ...), each subpath forms an independent module boundary. Only import the domain you actually depend on.
 
 ### Available subpaths
 
@@ -76,7 +76,7 @@ new RegisterUserUseCase(
 )
 ```
 
-Dependencies are injected by the consuming service. None of these ports are implemented here — you provide concrete adapters.
+Dependencies are injected by the consuming service. None of these ports are implemented here; you provide concrete adapters.
 
 **`execute(command: RegisterUserCommand): Promise<RegisterUserResult>`**
 
@@ -153,31 +153,35 @@ interface RegisterUserResult {
 
 ## TypeScript path aliases
 
-If you reference this package from within the monorepo (e.g. in tests or sibling services), add the subpath aliases to your `tsconfig.json`:
+For normal package consumption, always use the published subpath import:
+
+```ts
+import { RegisterUserUseCase } from "budget-control-fm-core/user";
+```
+
+Only use TypeScript `paths` overrides for **local monorepo development**.
+
+If needed, align them with the current source structure:
 
 ```json
 {
   "compilerOptions": {
     "paths": {
       "budget-control-fm-core/user": [
-        "./node_modules/budget-control-fm-core/dist/application/user/index.d.ts"
+        "../budget-control-fm-core/src/user/index.ts"
       ]
     }
   }
 }
 ```
 
-Or, if you use project references and point directly at the source:
+Current source entrypoint:
 
-```json
-{
-  "paths": {
-    "budget-control-fm-core/user": [
-      "../budget-control-fm-core/src/application/user/index.ts"
-    ]
-  }
-}
+```txt
+src/user/index.ts
 ```
+
+Do not reference outdated paths such as `src/application/...` or `dist/application/...`.
 
 ---
 
@@ -191,78 +195,76 @@ npm install
 
 ### Scripts
 
-| Command                 | Description                     |
-| ----------------------- | ------------------------------- |
-| `npm run lint`          | Lint with Biome                 |
-| `npm run lint:fix`      | Auto-fix lint issues            |
-| `npm run format`        | Format source files             |
-| `npm run typecheck`     | TypeScript type check (no emit) |
-| `npm test`              | Run unit tests                  |
-| `npm run test:coverage` | Tests with coverage report      |
-| `npm run build`         | Compile to `dist/`              |
-| `npm run clean`         | Remove `dist/`                  |
-| `npm run sonar`         | Run SonarQube analysis          |
+| Command                 | Description                                   |
+| ----------------------- | --------------------------------------------- |
+| `npm run lint`          | Lint with Biome                               |
+| `npm run lint:fix`      | Auto-fix lint issues                          |
+| `npm run format`        | Format source files                           |
+| `npm run typecheck`     | TypeScript type check (no emit)               |
+| `npm test`              | Run unit tests                                |
+| `npm run test:coverage` | Tests with coverage report                    |
+| `npm run build`         | Compile publishable output to `dist/`         |
+| `npm run clean`         | Remove `dist/`                                |
+| `npm run smoke`         | Validate the packed ESM package as a consumer |
+| `npm run sonar`         | Run SonarQube analysis                        |
+
+### Repository structure
+
+```txt
+src/user/index.ts
+dist/user/index.js
+dist/user/index.d.ts
+```
 
 ### Adding a new domain module
 
-1. Create `src/application/<domain>/index.ts` as the barrel for that domain.
+1. Create `src/<domain>/index.ts` as the barrel for that domain.
 2. Add the subpath to the `exports` map in `package.json`:
-   ```json
-   "./transaction": {
-     "import": "./dist/application/transaction/index.js",
-     "types": "./dist/application/transaction/index.d.ts"
-   }
-   ```
-3. Add the corresponding `paths` entry to `tsconfig.base.json`.
-4. Export only what downstream consumers need from the barrel — keep domain internals private.
+
+```json
+"./transaction": {
+  "import": "./dist/transaction/index.js",
+  "types": "./dist/transaction/index.d.ts"
+}
+```
+
+3. If using local TS path aliases:
+
+```json
+{
+  "compilerOptions": {
+    "paths": {
+      "budget-control-fm-core/transaction": ["./src/transaction/index.ts"]
+    }
+  }
+}
+```
+
+4. Export only what downstream consumers need.
+5. Add/update smoke tests for the new subpath.
 
 ---
 
 ## Release process
 
-This project uses [Changesets](https://github.com/changesets/changesets) for versioning and automated publishing.
+This project uses Changesets.
 
-**To ship a change:**
-
-1. Create a branch (`feature/`, `bugfix/`, `chore/`, etc.).
-2. Make your changes and ensure all checks pass locally:
-   ```sh
-   npm run lint && npm run typecheck && npm test && npm run build
-   ```
-3. Create a changeset describing the change:
-   ```sh
-   npx changeset
-   ```
-4. Commit the generated `.changeset/*.md` file and open a pull request to `main`.
-
-**What happens on merge:**
-
-1. The CD workflow runs and either:
-   - Opens a `chore: release version packages` PR (if unreleased changesets exist), or
-   - Publishes the package to npm (if the release PR itself was merged).
-2. `CHANGELOG.md` and `package.json` version are updated automatically.
-3. The published package includes a provenance attestation (OIDC-signed via npm).
+```sh
+npm run lint && npm run typecheck && npm test && npm run smoke
+```
 
 ---
 
 ## Contributing
 
-- Follow the kebab-case file naming convention with role suffixes: `.vo.ts`, `.entity.ts`, `.use-case.ts`, `.port.ts`, `.types.ts`
-- All domain constructors must use `private constructor` + `Object.freeze(this)`
-- Throw `TypeError` for all domain validation failures — never return `null` or `undefined` for invalid input
-- Ports belong in `application/`, not `domain/`
-- No infrastructure dependencies (no `crypto`, no `fetch`, no `fs`) in `src/domain/`
-
----
-
-## Changelog
-
-See [`CHANGELOG.md`](./CHANGELOG.md). Generated automatically by Changesets.
+- Follow kebab-case with suffixes (`.vo.ts`, `.entity.ts`, `.use-case.ts`, etc.)
+- Use `private constructor` + `Object.freeze(this)`
+- Throw `TypeError` for invalid domain input
+- Keep domain free of infrastructure dependencies
+- Expose public API via `src/<domain>/index.ts`
 
 ---
 
 ## License
 
 ISC
-
-.
