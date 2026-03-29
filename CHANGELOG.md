@@ -1,5 +1,11 @@
 # budget-control-fm-core
 
+## 0.6.0
+
+### Minor Changes
+
+- 960a88e: updated user use cases
+
 ## 0.5.0
 
 ### Minor Changes
