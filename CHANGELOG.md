@@ -1,5 +1,11 @@
 # budget-control-fm-core
 
+## 0.6.1
+
+### Patch Changes
+
+- ok
+
 ## 0.6.0
 
 ### Minor Changes
