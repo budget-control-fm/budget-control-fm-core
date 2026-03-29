@@ -1,5 +1,17 @@
 # budget-control-fm-core
 
+## 0.6.0
+
+### Minor Changes
+
+- 960a88e: updated user use cases
+
+### Patch Changes
+
+- 952d0fa: testing changebox
+- 4e40661: yet new feature
+- 8898f4d: updated workflows
+
 ## 0.5.0
 
 ### Minor Changes
