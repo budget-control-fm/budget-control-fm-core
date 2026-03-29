@@ -58,6 +58,7 @@ jobs:
               task: "chore",
               chore: "chore",
               hotfix: "hotfix",
+              release: "release",
             };
 
             const branchType = typeMap[issueTypeName];
