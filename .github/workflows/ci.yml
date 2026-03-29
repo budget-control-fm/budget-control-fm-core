@@ -14,19 +14,18 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  ci:
-    name: Code Ready to Merge to Main
+  validate:
+    name: Validate PR
     if: github.head_ref != 'changeset-release/main'
-
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           fetch-depth: 0
 
-      - name: Setup Node
+      - name: Set up Node.js
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
           node-version: 24
@@ -35,30 +34,29 @@ jobs:
       - name: Install dependencies
         run: npm ci --ignore-scripts
 
-      - name: Audit dependencies
-        run: npm audit --audit-level=high --omit=dev
-
       - name: Lint
         run: npm run lint
 
-      - name: Type check
+      - name: Type-check
         run: npm run typecheck
 
-      - name: Run tests with coverage
+      - name: Audit dependencies
+        run: npm audit --audit-level=high --omit=dev
+
+      - name: Unit test with coverage
         run: npm run test:coverage
 
-      - name: Run smoke tests
+      - name: Smoke-test
         run: npm run smoke
 
       - name: Build
         run: npm run build
 
-      - name: Get package version
+      - name: Resolve package version
         id: package_version
         run: echo "version=$(node -p "require('./package.json').version")" >> "$GITHUB_OUTPUT"
 
-      - name: SonarQube Cloud Scan
-        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+      - name: Scan with SonarCloud
         uses: SonarSource/sonarqube-scan-action@a31c9398be7ace6bbfaf30c0bd5d415f843d45e9
         with:
           args: >

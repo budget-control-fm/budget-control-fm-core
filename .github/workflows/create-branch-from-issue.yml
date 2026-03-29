@@ -195,8 +195,7 @@ jobs:
                   "Use locally:",
                   "",
                   "```bash",
-                  "git fetch origin",
-                  `git checkout ${branch}`,
+                  `./scripts/start-issue.sh ${branch}`,
                   "```",
                 ].join("\n")
               : `Linked branch already exists or the branch name is already taken: \`${branch}\``;
