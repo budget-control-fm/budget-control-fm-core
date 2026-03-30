@@ -1,5 +1,12 @@
 # budget-control-fm-core
 
+## 0.6.2
+
+### Patch Changes
+
+- f2c736f: fixing user use case
+- 9e75420: feat 2
+
 ## 0.6.1
 
 ### Patch Changes

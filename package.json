@@ -2,7 +2,7 @@
   "name": "budget-control-fm-core",
   "author": "Fabio Moggi",
   "description": "Core functionality for the budget control financial management system",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "license": "ISC",
   "type": "module",
   "engines": {
