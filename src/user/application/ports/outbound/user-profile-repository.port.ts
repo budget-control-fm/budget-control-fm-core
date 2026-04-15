@@ -1,6 +1,6 @@
 // src/application/user/ports/outbound/user-profile-repository.port.ts
-import type { User } from "../../../../user/domain/entities/user.entity.js";
+import type { UserDto } from "../../../../user/application/types/register-user.types.js";
 
 export interface UserProfileRepositoryPort {
-  save(user: User): Promise<void>;
+  save(user: UserDto): Promise<void>;
 }

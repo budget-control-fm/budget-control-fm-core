@@ -2,6 +2,7 @@
 export type {
   RegisterUserCommand,
   RegisterUserResult,
+  UserDto,
 } from "./application/types/register-user.types.js";
 
 // ===== PORTS =====
