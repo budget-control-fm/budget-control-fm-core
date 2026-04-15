@@ -1,11 +1,13 @@
 import { jest } from "@jest/globals";
-import type { User } from "../../../../../src/user/domain/entities/user.entity.js";
+import type {
+  UserDto,
+  RegisterUserCommand,
+} from "../../../../../src/user/application/types/register-user.types.js";
 import { RegisterUserUseCase } from "../../../../../src/user/application/use-cases/register-user.use-case.js";
 import type { AuthServicePort } from "../../../../../src/user/application/ports/outbound/auth-service.port.js";
 import type { UserProfileRepositoryPort } from "../../../../../src/user/application/ports/outbound/user-profile-repository.port.js";
 import type { IdGeneratorPort } from "../../../../../src/kernel/application/ports/outbound/id-generator.port.js";
 import type { ClockPort } from "../../../../../src/kernel/application/ports/outbound/clock.port.js";
-import type { RegisterUserCommand } from "../../../../../src/user/application/types/register-user.types.js";
 
 const VALID_USER_ID = "550e8400-e29b-41d4-a716-446655440000";
 const FIXED_DATE = "2024-01-15";
@@ -31,12 +33,14 @@ const makeClock = (): ClockPort => ({
 
 const makeAuthService = (): AuthServicePort => ({
   registerUser: jest
-    .fn<(user: User, password: string) => Promise<void>>()
+    .fn<(user: UserDto, password: string) => Promise<void>>()
     .mockResolvedValue(undefined),
 });
 
 const makeUserProfileRepository = (): UserProfileRepositoryPort => ({
-  save: jest.fn<(user: User) => Promise<void>>().mockResolvedValue(undefined),
+  save: jest
+    .fn<(user: UserDto) => Promise<void>>()
+    .mockResolvedValue(undefined),
 });
 
 const makeUseCase = () =>
@@ -83,7 +87,7 @@ describe("RegisterUserUseCase.execute()", () => {
       expect(clock.today).toHaveBeenCalledTimes(1);
     });
 
-    it("calls authService.registerUser with the constructed User and password", async () => {
+    it("calls authService.registerUser with the mapped UserDto and password", async () => {
       const authService = makeAuthService();
       const useCase = new RegisterUserUseCase(
         makeIdGenerator(),
@@ -97,16 +101,18 @@ describe("RegisterUserUseCase.execute()", () => {
       expect(authService.registerUser).toHaveBeenCalledTimes(1);
       expect(authService.registerUser).toHaveBeenCalledWith(
         expect.objectContaining({
-          id: expect.objectContaining({ value: VALID_USER_ID }),
-          fullName: expect.objectContaining({ value: "John Doe" }),
-          email: expect.objectContaining({ value: "john.doe@example.com" }),
-          birthDate: expect.objectContaining({ value: "1990-01-01" }),
+          id: VALID_USER_ID,
+          fullName: "John Doe",
+          email: "john.doe@example.com",
+          birthDate: "1990-01-01",
+          createdAt: FIXED_DATE,
+          updatedAt: FIXED_DATE,
         }),
         STUB_CREDENTIALS,
       );
     });
 
-    it("calls userProfileRepository.save with the constructed User", async () => {
+    it("calls userProfileRepository.save with the mapped UserDto", async () => {
       const userProfileRepository = makeUserProfileRepository();
       const useCase = new RegisterUserUseCase(
         makeIdGenerator(),
@@ -120,10 +126,12 @@ describe("RegisterUserUseCase.execute()", () => {
       expect(userProfileRepository.save).toHaveBeenCalledTimes(1);
       expect(userProfileRepository.save).toHaveBeenCalledWith(
         expect.objectContaining({
-          id: expect.objectContaining({ value: VALID_USER_ID }),
-          fullName: expect.objectContaining({ value: "John Doe" }),
-          email: expect.objectContaining({ value: "john.doe@example.com" }),
-          birthDate: expect.objectContaining({ value: "1990-01-01" }),
+          id: VALID_USER_ID,
+          fullName: "John Doe",
+          email: "john.doe@example.com",
+          birthDate: "1990-01-01",
+          createdAt: FIXED_DATE,
+          updatedAt: FIXED_DATE,
         }),
       );
     });
@@ -133,7 +141,7 @@ describe("RegisterUserUseCase.execute()", () => {
 
       const authService: AuthServicePort = {
         registerUser: jest
-          .fn<(user: User, password: string) => Promise<void>>()
+          .fn<(user: UserDto, password: string) => Promise<void>>()
           .mockImplementation(async () => {
             callOrder.push("authService");
           }),
@@ -141,7 +149,7 @@ describe("RegisterUserUseCase.execute()", () => {
 
       const userProfileRepository: UserProfileRepositoryPort = {
         save: jest
-          .fn<(user: User) => Promise<void>>()
+          .fn<(user: UserDto) => Promise<void>>()
           .mockImplementation(async () => {
             callOrder.push("userProfileRepository");
           }),
@@ -172,7 +180,7 @@ describe("RegisterUserUseCase.execute()", () => {
 
       expect(authService.registerUser).toHaveBeenCalledWith(
         expect.objectContaining({
-          email: expect.objectContaining({ value: "john.doe@example.com" }),
+          email: "john.doe@example.com",
         }),
         STUB_CREDENTIALS,
       );
@@ -252,7 +260,7 @@ describe("RegisterUserUseCase.execute()", () => {
     it("propagates errors thrown by authService", async () => {
       const authService: AuthServicePort = {
         registerUser: jest
-          .fn<(user: User, password: string) => Promise<void>>()
+          .fn<(user: UserDto, password: string) => Promise<void>>()
           .mockRejectedValue(new Error("Auth service unavailable")),
       };
 
@@ -272,7 +280,7 @@ describe("RegisterUserUseCase.execute()", () => {
       const userProfileRepository = makeUserProfileRepository();
       const authService: AuthServicePort = {
         registerUser: jest
-          .fn<(user: User, password: string) => Promise<void>>()
+          .fn<(user: UserDto, password: string) => Promise<void>>()
           .mockRejectedValue(new Error("Auth service unavailable")),
       };
 
@@ -291,7 +299,7 @@ describe("RegisterUserUseCase.execute()", () => {
     it("propagates errors thrown by userProfileRepository", async () => {
       const userProfileRepository: UserProfileRepositoryPort = {
         save: jest
-          .fn<(user: User) => Promise<void>>()
+          .fn<(user: UserDto) => Promise<void>>()
           .mockRejectedValue(new Error("Database unavailable")),
       };
 

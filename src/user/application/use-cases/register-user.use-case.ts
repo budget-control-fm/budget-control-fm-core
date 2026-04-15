@@ -4,6 +4,7 @@ import type {
   RegisterUserCommand,
   RegisterUserResult,
 } from "../types/register-user.types.js";
+import { UserMapper } from "../mappers/user.mapper.js";
 import { UserId } from "../../domain/value-objects/user-id.vo.js";
 import { FullName } from "../../domain/value-objects/full-name.vo.js";
 import { Email } from "../../../kernel/domain/value-objects/email.vo.js";
@@ -27,18 +28,20 @@ export class RegisterUserUseCase {
     const birthDate = IsoDate.of(command.birthDate);
     const now = IsoDate.of(this.clock.today());
 
-    const user = User.create({
-      id,
-      fullName,
-      email,
-      birthDate,
-      createdAt: now,
-      updatedAt: now,
-    });
+    const dto = UserMapper.toDto(
+      User.create({
+        id,
+        fullName,
+        email,
+        birthDate,
+        createdAt: now,
+        updatedAt: now,
+      }),
+    );
 
-    await this.authService.registerUser(user, command.password);
-    await this.userProfileRepository.save(user);
+    await this.authService.registerUser(dto, command.password);
+    await this.userProfileRepository.save(dto);
 
-    return { userId: user.id.value };
+    return { userId: dto.id };
   }
 }

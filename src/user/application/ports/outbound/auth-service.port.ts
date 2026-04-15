@@ -1,5 +1,5 @@
-import type { User } from "../../../../user/domain/entities/user.entity.js";
+import type { UserDto } from "../../../../user/application/types/register-user.types.js";
 
 export interface AuthServicePort {
-  registerUser(user: User, password: string): Promise<void>;
+  registerUser(user: UserDto, password: string): Promise<void>;
 }

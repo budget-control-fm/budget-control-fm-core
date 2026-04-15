@@ -8,3 +8,12 @@ export interface RegisterUserCommand {
 export interface RegisterUserResult {
   userId: string;
 }
+
+export interface UserDto {
+  id: string;
+  fullName: string;
+  email: string;
+  birthDate: string;
+  createdAt: string;
+  updatedAt: string;
+}
