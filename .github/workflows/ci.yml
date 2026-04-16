@@ -19,7 +19,7 @@ permissions:
 
 jobs:
   validate:
-    name: Validate PR (CI)
+    name: Merge to Main
     if: github.head_ref != 'changeset-release/main'
     runs-on: ubuntu-latest
 
