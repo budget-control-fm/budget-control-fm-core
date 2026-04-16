@@ -79,11 +79,11 @@ jobs:
               .toLowerCase()
               .normalize("NFKD")
               .replace(/[\u0300-\u036f]/g, "")
-              .replace(/[^a-z0-9\s-]/g, "")
+              .replace(/[^a-z0-9\s]/g, " ")
               .trim()
-              .replace(/\s+/g, "-")
-              .replace(/-+/g, "-")
-              .replace(/^-|-$/g, "");
+              .replace(/\s+/g, "_")
+              .replace(/_+/g, "_")
+              .replace(/^_|_$/g, "");
 
             const branchName = `${branchType}/${issue.number}-${slug}`;
 
