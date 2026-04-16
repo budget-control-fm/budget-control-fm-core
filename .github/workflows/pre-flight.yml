@@ -1,4 +1,4 @@
-name: Pre-flight
+name: Validate Branch
 
 on:
   push:
@@ -15,7 +15,7 @@ concurrency:
 
 jobs:
   validate-branch:
-    name: Validate Branch
+    name: Push Checks
     runs-on: ubuntu-latest
 
     steps:
