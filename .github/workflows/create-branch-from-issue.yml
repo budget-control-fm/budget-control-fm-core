@@ -1,8 +1,12 @@
-name: Create branch from issue
+name: Automation
 
 on:
   issues:
     types: [assigned]
+
+concurrency:
+  group: create-branch-${{ github.event.issue.number }}
+  cancel-in-progress: false
 
 permissions:
   contents: write
@@ -10,7 +14,7 @@ permissions:
 
 jobs:
   create-branch:
-    name: create linked branch from issue type
+    name: Create Branch from Issue
     runs-on: ubuntu-latest
 
     steps:
@@ -58,7 +62,6 @@ jobs:
               task: "chore",
               chore: "chore",
               hotfix: "hotfix",
-              release: "release",
             };
 
             const branchType = typeMap[issueTypeName];
@@ -76,9 +79,9 @@ jobs:
               .toLowerCase()
               .normalize("NFKD")
               .replace(/[\u0300-\u036f]/g, "")
-              .replace(/[^a-z0-9\\s-]/g, "")
+              .replace(/[^a-z0-9\s-]/g, "")
               .trim()
-              .replace(/\\s+/g, "-")
+              .replace(/\s+/g, "-")
               .replace(/-+/g, "-")
               .replace(/^-|-$/g, "");
 
@@ -102,11 +105,7 @@ jobs:
             const owner = context.repo.owner;
             const repo = context.repo.repo;
 
-            const repoInfo = await github.rest.repos.get({
-              owner,
-              repo,
-            });
-
+            const repoInfo = await github.rest.repos.get({ owner, repo });
             const defaultBranch = repoInfo.data.default_branch;
 
             const ref = await github.rest.git.getRef({
