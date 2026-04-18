@@ -1,4 +1,4 @@
-name: Version Packages
+name: Open or Update Release PR
 
 on:
   push:
