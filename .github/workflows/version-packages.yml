@@ -35,7 +35,7 @@ jobs:
         run: npm ci --ignore-scripts
 
       - name: Open or update Version Packages PR
-        uses: changesets/action@v1
+        uses: changesets/action@e87c8ed249971350e47fab7515075f44eb134e5b
         with:
           title: "Version Packages"
           commit: "chore: version packages"
