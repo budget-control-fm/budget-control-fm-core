@@ -1,8 +1,11 @@
-name: Automation
+name: Create Branch from Issue
 
 on:
   issues:
     types: [assigned]
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 concurrency:
   group: create-branch-${{ github.event.issue.number }}
@@ -14,7 +17,7 @@ permissions:
 
 jobs:
   create-branch:
-    name: Create Branch from Issue
+    name: Automation
     runs-on: ubuntu-latest
 
     steps:

@@ -1,4 +1,4 @@
-name: CI
+name: Validate PR
 
 on:
   pull_request:
@@ -19,7 +19,7 @@ permissions:
 
 jobs:
   validate:
-    name: Validate PR
+    name: Merge to Main
     if: github.head_ref != 'changeset-release/main'
     runs-on: ubuntu-latest
 
