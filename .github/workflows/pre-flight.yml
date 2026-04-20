@@ -1,12 +1,11 @@
-name: Validate Branch
+name: Validate Branch Push
 
 on:
   push:
     branches:
+      - chore/**
       - feature/**
       - fix/**
-      - hotfix/**
-      - chore/**
       - docs/**
 
 concurrency:
@@ -14,8 +13,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  validate-branch:
-    name: Push Checks
+  preflight:
+    name: Validate Branch Push
     runs-on: ubuntu-latest
 
     steps:
