@@ -1,6 +1,6 @@
 name: CI
 
-run-name: "Validate Pull Request: ${{ github.event.pull_request.title }}"
+run-name: "Validate PR: ${{ github.event.pull_request.title }}"
 
 on:
   pull_request:
@@ -21,7 +21,7 @@ permissions:
 
 jobs:
   validate:
-    name: Validate Pull Request
+    name: Validate PR
     runs-on: ubuntu-latest # remove the job-level if entirely
 
     steps:

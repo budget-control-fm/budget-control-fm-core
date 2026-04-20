@@ -1,6 +1,6 @@
 name: Pre-flight
 
-run-name: "Validate Branch Push: ${{ github.event.head_commit.message }}"
+run-name: "Validate Branch: ${{ github.event.head_commit.message }}"
 
 on:
   push:
@@ -16,7 +16,7 @@ concurrency:
 
 jobs:
   preflight:
-    name: Validate Branch Push
+    name: Validate Branch
     runs-on: ubuntu-latest
 
     steps:
