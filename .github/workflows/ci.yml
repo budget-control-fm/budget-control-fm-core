@@ -22,8 +22,7 @@ permissions:
 jobs:
   validate:
     name: Validate Pull Request
-    if: github.head_ref != 'changeset-release/main'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest # remove the job-level if entirely
 
     steps:
       - name: Checkout code
@@ -42,8 +41,9 @@ jobs:
 
       - name: Verify changeset is present
         if: |
-          startsWith(github.head_ref, 'feature/') ||
-          startsWith(github.head_ref, 'fix/')
+          github.head_ref != 'changeset-release/main' &&
+          (startsWith(github.head_ref, 'feature/') ||
+          startsWith(github.head_ref, 'fix/'))
         run: |
           if [ -z "$(ls .changeset/*.md 2>/dev/null | grep -v README.md)" ]; then
             echo "No changeset found. Run 'npx changeset' before opening a PR."
@@ -51,21 +51,27 @@ jobs:
           fi
 
       - name: Lint
+        if: github.head_ref != 'changeset-release/main'
         run: npm run lint
 
       - name: Type-check
+        if: github.head_ref != 'changeset-release/main'
         run: npm run typecheck
 
       - name: Audit dependencies
+        if: github.head_ref != 'changeset-release/main'
         run: npm audit --audit-level=high --omit=dev
 
       - name: Unit test with coverage
+        if: github.head_ref != 'changeset-release/main'
         run: npm run test:coverage
 
       - name: Smoke-test
+        if: github.head_ref != 'changeset-release/main'
         run: npm run smoke
 
       - name: Build
+        if: github.head_ref != 'changeset-release/main'
         run: npm run build
 
       - name: Resolve package version
