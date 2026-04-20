@@ -1,4 +1,6 @@
-name: Validate Branch Push
+name: Pre-flight
+
+run-name: "Validate Branch Push: ${{ github.event.head_commit.message }}"
 
 on:
   push:

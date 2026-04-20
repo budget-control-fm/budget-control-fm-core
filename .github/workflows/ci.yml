@@ -1,4 +1,6 @@
-name: Validate Pull Request
+name: CI
+
+run-name: "Validate Pull Request: ${{ github.event.pull_request.title }}"
 
 on:
   pull_request:
