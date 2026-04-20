@@ -1,4 +1,6 @@
-name: Create Branch from Issue
+name: Automation
+
+run-name: "Create Branch: ${{ github.event.issue.title }}"
 
 on:
   issues:
@@ -17,7 +19,7 @@ permissions:
 
 jobs:
   create-branch:
-    name: Automation
+    name: Create Branch from Issue
     runs-on: ubuntu-latest
 
     steps:
