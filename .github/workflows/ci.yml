@@ -1,4 +1,4 @@
-name: Validate PR
+name: CI
 
 on:
   pull_request:
@@ -19,7 +19,7 @@ permissions:
 
 jobs:
   validate:
-    name: Validate PR
+    name: Validate Pull Request
     if: github.head_ref != 'changeset-release/main'
     runs-on: ubuntu-latest
 
@@ -40,8 +40,8 @@ jobs:
 
       - name: Verify changeset is present
         if: |
-          github.head_ref != 'changeset-release/main' &&
-          (startsWith(github.head_ref, 'feature/') || startsWith(github.head_ref, 'fix/'))
+          startsWith(github.head_ref, 'feature/') ||
+          startsWith(github.head_ref, 'fix/')
         run: |
           if [ -z "$(ls .changeset/*.md 2>/dev/null | grep -v README.md)" ]; then
             echo "No changeset found. Run 'npx changeset' before opening a PR."
@@ -78,12 +78,3 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: https://sonarcloud.io
-
-      - name: Tag release
-        if: startsWith(github.head_ref, 'release/')
-        run: |
-          VERSION=$(node -p "require('./package.json').version")
-          git tag "v$VERSION"
-          git push origin "v$VERSION"
-        env:
-          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
