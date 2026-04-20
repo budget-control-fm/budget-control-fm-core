@@ -1,4 +1,6 @@
-name: Open or Update Release PR
+name: Version Packages
+
+run-name: "Version Packages: Open or Update Release PR"
 
 on:
   push:
