@@ -1,4 +1,6 @@
-name: Publish to npm
+name: CD
+
+run-name: "Version Packages: Publish to npm"
 
 on:
   push:
