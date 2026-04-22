@@ -9,5 +9,5 @@ import type { RegisterAuthUserInput } from "../../types/register-user.types.js";
  * resolve successfully.
  */
 export interface AuthServicePort {
-  registerUser(user: RegisterAuthUserInput): Promise<void>;
+  registerUser(input: RegisterAuthUserInput): Promise<void>;
 }
