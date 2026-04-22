@@ -4,14 +4,15 @@ import type {
   RegisterUserCommand,
   RegisterUserResult,
 } from "../types/register-user.types.js";
-import { UserMapper } from "../mappers/user.mapper.js";
-import { UserId } from "../../domain/value-objects/user-id.vo.js";
-import { FullName } from "../../domain/value-objects/full-name.vo.js";
-import { Email } from "../../../kernel/domain/value-objects/email.vo.js";
-import { IsoDate } from "../../../kernel/domain/value-objects/iso-date.vo.js";
-import { User } from "../../../user/domain/entities/user.entity.js";
 import type { IdGeneratorPort } from "../../../kernel/application/ports/outbound/id-generator.port.js";
 import type { ClockPort } from "../../../kernel/application/ports/outbound/clock.port.js";
+import {
+  UserId,
+  FullName,
+  Password,
+} from "../../domain/value-objects/index.js";
+import { Email, IsoDate } from "../../../kernel/domain/value-objects/index.js";
+import { User } from "../../domain/entities/user.entity.js";
 
 export class RegisterUserUseCase {
   constructor(
@@ -25,23 +26,35 @@ export class RegisterUserUseCase {
     const id = UserId.of(this.idGenerator.generate());
     const fullName = FullName.of(command.fullName);
     const email = Email.of(command.email);
+    const password = Password.of(command.password);
     const birthDate = IsoDate.of(command.birthDate);
     const now = IsoDate.of(this.clock.today());
 
-    const dto = UserMapper.toDto(
-      User.create({
-        id,
-        fullName,
-        email,
-        birthDate,
-        createdAt: now,
-        updatedAt: now,
-      }),
-    );
+    const user = User.create({
+      id,
+      fullName,
+      email,
+      password,
+      birthDate,
+      createdAt: now,
+      updatedAt: now,
+    });
 
-    await this.authService.registerUser(dto, command.password);
-    await this.userProfileRepository.save(dto);
+    await this.authService.registerUser({
+      id: user.id.value,
+      email: user.email.value,
+      password: password.value,
+    });
 
-    return { userId: dto.id };
+    await this.userProfileRepository.save({
+      id: user.id.value,
+      fullName: user.fullName.value,
+      email: user.email.value,
+      birthDate: user.birthDate.value,
+      createdAt: now.value,
+      updatedAt: now.value,
+    });
+
+    return { userId: user.id.value };
   }
 }

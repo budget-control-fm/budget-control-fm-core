@@ -1,6 +1,12 @@
-// src/application/user/ports/outbound/user-profile-repository.port.ts
-import type { UserDto } from "../../../../user/application/types/register-user.types.js";
+import type { PersistUserProfileInput } from "../../types/register-user.types.js";
 
+/**
+ * Outbound port for user profile persistence.
+ *
+ * Implementations MUST be idempotent: calling save with the same
+ * PersistUserProfileInput more than once must produce the same persisted state.
+ * Upsert semantics are required — do not insert-only.
+ */
 export interface UserProfileRepositoryPort {
-  save(user: UserDto): Promise<void>;
+  save(user: PersistUserProfileInput): Promise<void>;
 }

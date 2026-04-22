@@ -15,7 +15,7 @@ printf "${GREEN}→ Syncing main...${NC}\n"
 git checkout main
 git pull origin main
 
-printf "${GREEN}→ Creating branch $BRANCH..."
+printf "${GREEN}→ Creating branch $BRANCH...\n"
 git checkout -b "$BRANCH"
 
 printf "${GREEN}✓ Ready. Make your changes, then run:${NC}\n"

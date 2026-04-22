@@ -1,24 +1,25 @@
 import { jest } from "@jest/globals";
-import type {
-  UserDto,
-  RegisterUserCommand,
-} from "../../../../../src/user/application/types/register-user.types.js";
 import { RegisterUserUseCase } from "../../../../../src/user/application/use-cases/register-user.use-case.js";
 import type { AuthServicePort } from "../../../../../src/user/application/ports/outbound/auth-service.port.js";
 import type { UserProfileRepositoryPort } from "../../../../../src/user/application/ports/outbound/user-profile-repository.port.js";
 import type { IdGeneratorPort } from "../../../../../src/kernel/application/ports/outbound/id-generator.port.js";
 import type { ClockPort } from "../../../../../src/kernel/application/ports/outbound/clock.port.js";
+import type {
+  RegisterUserCommand,
+  RegisterAuthUserInput,
+  PersistUserProfileInput,
+} from "../../../../../src/user/application/types/register-user.types.js";
 
 const VALID_USER_ID = "550e8400-e29b-41d4-a716-446655440000";
 const FIXED_DATE = "2024-01-15";
-const STUB_CREDENTIALS = "stub-value-for-testing";
+const VALID_PASSWORD = "Secret1!";
 
 const makeCommand = (
   overrides?: Partial<RegisterUserCommand>,
 ): RegisterUserCommand => ({
   fullName: "John Doe",
   email: "john.doe@example.com",
-  password: STUB_CREDENTIALS,
+  password: VALID_PASSWORD,
   birthDate: "1990-01-01",
   ...overrides,
 });
@@ -33,13 +34,13 @@ const makeClock = (): ClockPort => ({
 
 const makeAuthService = (): AuthServicePort => ({
   registerUser: jest
-    .fn<(user: UserDto, password: string) => Promise<void>>()
+    .fn<(input: RegisterAuthUserInput) => Promise<void>>()
     .mockResolvedValue(undefined),
 });
 
 const makeUserProfileRepository = (): UserProfileRepositoryPort => ({
   save: jest
-    .fn<(user: UserDto) => Promise<void>>()
+    .fn<(input: PersistUserProfileInput) => Promise<void>>()
     .mockResolvedValue(undefined),
 });
 
@@ -87,7 +88,7 @@ describe("RegisterUserUseCase.execute()", () => {
       expect(clock.today).toHaveBeenCalledTimes(1);
     });
 
-    it("calls authService.registerUser with the mapped UserDto and password", async () => {
+    it("calls authService.registerUser with the correct input", async () => {
       const authService = makeAuthService();
       const useCase = new RegisterUserUseCase(
         makeIdGenerator(),
@@ -99,20 +100,14 @@ describe("RegisterUserUseCase.execute()", () => {
       await useCase.execute(makeCommand());
 
       expect(authService.registerUser).toHaveBeenCalledTimes(1);
-      expect(authService.registerUser).toHaveBeenCalledWith(
-        expect.objectContaining({
-          id: VALID_USER_ID,
-          fullName: "John Doe",
-          email: "john.doe@example.com",
-          birthDate: "1990-01-01",
-          createdAt: FIXED_DATE,
-          updatedAt: FIXED_DATE,
-        }),
-        STUB_CREDENTIALS,
-      );
+      expect(authService.registerUser).toHaveBeenCalledWith({
+        id: VALID_USER_ID,
+        email: "john.doe@example.com",
+        password: VALID_PASSWORD,
+      });
     });
 
-    it("calls userProfileRepository.save with the mapped UserDto", async () => {
+    it("calls userProfileRepository.save with the correct input", async () => {
       const userProfileRepository = makeUserProfileRepository();
       const useCase = new RegisterUserUseCase(
         makeIdGenerator(),
@@ -124,16 +119,14 @@ describe("RegisterUserUseCase.execute()", () => {
       await useCase.execute(makeCommand());
 
       expect(userProfileRepository.save).toHaveBeenCalledTimes(1);
-      expect(userProfileRepository.save).toHaveBeenCalledWith(
-        expect.objectContaining({
-          id: VALID_USER_ID,
-          fullName: "John Doe",
-          email: "john.doe@example.com",
-          birthDate: "1990-01-01",
-          createdAt: FIXED_DATE,
-          updatedAt: FIXED_DATE,
-        }),
-      );
+      expect(userProfileRepository.save).toHaveBeenCalledWith({
+        id: VALID_USER_ID,
+        fullName: "John Doe",
+        email: "john.doe@example.com",
+        birthDate: "1990-01-01",
+        createdAt: FIXED_DATE,
+        updatedAt: FIXED_DATE,
+      });
     });
 
     it("calls authService before userProfileRepository", async () => {
@@ -141,7 +134,7 @@ describe("RegisterUserUseCase.execute()", () => {
 
       const authService: AuthServicePort = {
         registerUser: jest
-          .fn<(user: UserDto, password: string) => Promise<void>>()
+          .fn<(input: RegisterAuthUserInput) => Promise<void>>()
           .mockImplementation(async () => {
             callOrder.push("authService");
           }),
@@ -149,7 +142,7 @@ describe("RegisterUserUseCase.execute()", () => {
 
       const userProfileRepository: UserProfileRepositoryPort = {
         save: jest
-          .fn<(user: UserDto) => Promise<void>>()
+          .fn<(input: PersistUserProfileInput) => Promise<void>>()
           .mockImplementation(async () => {
             callOrder.push("userProfileRepository");
           }),
@@ -182,7 +175,6 @@ describe("RegisterUserUseCase.execute()", () => {
         expect.objectContaining({
           email: "john.doe@example.com",
         }),
-        STUB_CREDENTIALS,
       );
     });
   });
@@ -206,6 +198,34 @@ describe("RegisterUserUseCase.execute()", () => {
       const useCase = makeUseCase();
       await expect(
         useCase.execute(makeCommand({ fullName: "AB" })),
+      ).rejects.toThrow(TypeError);
+    });
+
+    it("throws TypeError for a password shorter than 5 characters", async () => {
+      const useCase = makeUseCase();
+      await expect(
+        useCase.execute(makeCommand({ password: "Ab1!" })),
+      ).rejects.toThrow(TypeError);
+    });
+
+    it("throws TypeError for a password longer than 16 characters", async () => {
+      const useCase = makeUseCase();
+      await expect(
+        useCase.execute(makeCommand({ password: "ValidPass1!ValidP" })),
+      ).rejects.toThrow(TypeError);
+    });
+
+    it("throws TypeError for a password without a number", async () => {
+      const useCase = makeUseCase();
+      await expect(
+        useCase.execute(makeCommand({ password: "Secret!!" })),
+      ).rejects.toThrow(TypeError);
+    });
+
+    it("throws TypeError for a password without a special character", async () => {
+      const useCase = makeUseCase();
+      await expect(
+        useCase.execute(makeCommand({ password: "Secret123" })),
       ).rejects.toThrow(TypeError);
     });
 
@@ -260,7 +280,7 @@ describe("RegisterUserUseCase.execute()", () => {
     it("propagates errors thrown by authService", async () => {
       const authService: AuthServicePort = {
         registerUser: jest
-          .fn<(user: UserDto, password: string) => Promise<void>>()
+          .fn<(input: RegisterAuthUserInput) => Promise<void>>()
           .mockRejectedValue(new Error("Auth service unavailable")),
       };
 
@@ -280,7 +300,7 @@ describe("RegisterUserUseCase.execute()", () => {
       const userProfileRepository = makeUserProfileRepository();
       const authService: AuthServicePort = {
         registerUser: jest
-          .fn<(user: UserDto, password: string) => Promise<void>>()
+          .fn<(input: RegisterAuthUserInput) => Promise<void>>()
           .mockRejectedValue(new Error("Auth service unavailable")),
       };
 
@@ -299,7 +319,7 @@ describe("RegisterUserUseCase.execute()", () => {
     it("propagates errors thrown by userProfileRepository", async () => {
       const userProfileRepository: UserProfileRepositoryPort = {
         save: jest
-          .fn<(user: UserDto) => Promise<void>>()
+          .fn<(input: PersistUserProfileInput) => Promise<void>>()
           .mockRejectedValue(new Error("Database unavailable")),
       };
 
