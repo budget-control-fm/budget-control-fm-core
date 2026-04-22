@@ -2,7 +2,8 @@
 export type {
   RegisterUserCommand,
   RegisterUserResult,
-  UserDto,
+  RegisterAuthUserInput,
+  PersistUserProfileInput,
 } from "./application/types/register-user.types.js";
 
 // ===== PORTS =====

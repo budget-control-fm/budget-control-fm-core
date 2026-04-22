@@ -3,6 +3,6 @@
 export const registerUserCommand = {
   fullName: "Jane Doe",
   email: "jane@example.com",
-  password: "secret",
+  password: "Secret1!",
   birthDate: "1990-06-15",
 };

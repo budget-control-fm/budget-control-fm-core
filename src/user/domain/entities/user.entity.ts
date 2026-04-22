@@ -1,13 +1,12 @@
-import { UserId } from "../value-objects/user-id.vo.js";
-import { FullName } from "../value-objects/full-name.vo.js";
-import { Email } from "../../../kernel/domain/value-objects/email.vo.js";
-import { IsoDate } from "../../../kernel/domain/value-objects/iso-date.vo.js";
+import { UserId, FullName, Password } from "../value-objects/index.js";
+import { Email, IsoDate } from "../../../kernel/domain/value-objects/index.js";
 
 export class User {
   private constructor(
     public readonly id: UserId,
     public readonly fullName: FullName,
     public readonly email: Email,
+    public readonly password: Password,
     public readonly birthDate: IsoDate,
     public readonly createdAt: IsoDate,
     public readonly updatedAt: IsoDate,
@@ -19,6 +18,7 @@ export class User {
     id: UserId;
     fullName: FullName;
     email: Email;
+    password: Password;
     birthDate: IsoDate;
     createdAt: IsoDate;
     updatedAt: IsoDate;
@@ -31,6 +31,7 @@ export class User {
       params.id,
       params.fullName,
       params.email,
+      params.password,
       params.birthDate,
       params.createdAt,
       params.updatedAt,
@@ -42,6 +43,7 @@ export class User {
       this.id,
       newName,
       this.email,
+      this.password,
       this.birthDate,
       this.createdAt,
       updatedAt,
@@ -53,6 +55,7 @@ export class User {
       this.id,
       this.fullName,
       newEmail,
+      this.password,
       this.birthDate,
       this.createdAt,
       updatedAt,

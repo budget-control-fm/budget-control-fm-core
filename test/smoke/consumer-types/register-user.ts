@@ -1,7 +1,9 @@
-// test/smoke/consumer-types/register-user.ts
 import { RegisterUserUseCase } from "budget-control-fm-core/user";
 import type {
   RegisterUserCommand,
+  RegisterUserResult,
+  RegisterAuthUserInput,
+  PersistUserProfileInput,
   AuthServicePort,
   UserProfileRepositoryPort,
   IdGeneratorPort,
@@ -16,12 +18,14 @@ const clock: ClockPort = {
   today: () => "2026-01-01",
 };
 
+// ✅ typed against RegisterAuthUserInput — tsc fails here if port leaks User entity
 const authService: AuthServicePort = {
-  registerUser: async () => {},
+  async registerUser(input: RegisterAuthUserInput): Promise<void> {},
 };
 
+// ✅ typed against PersistUserProfileInput — tsc fails here if port leaks User entity
 const userProfileRepository: UserProfileRepositoryPort = {
-  save: async () => {},
+  async save(input: PersistUserProfileInput): Promise<void> {},
 };
 
 const useCase = new RegisterUserUseCase(
@@ -34,8 +38,9 @@ const useCase = new RegisterUserUseCase(
 const command: RegisterUserCommand = {
   fullName: "Jane Doe",
   email: "jane@example.com",
-  password: "secret",
+  password: "Secret1!",
   birthDate: "1990-06-15",
 };
 
-await useCase.execute(command);
+const result: RegisterUserResult = await useCase.execute(command);
+console.log(result.userId);
