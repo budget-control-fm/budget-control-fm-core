@@ -222,6 +222,13 @@ describe("RegisterUserUseCase.execute()", () => {
       ).rejects.toThrow(TypeError);
     });
 
+    it("throws TypeError for an invalid password", async () => {
+      const useCase = makeUseCase();
+      await expect(
+        useCase.execute(makeCommand({ password: "weak" })),
+      ).rejects.toThrow(TypeError);
+    });
+
     it("throws TypeError for a password without a special character", async () => {
       const useCase = makeUseCase();
       await expect(

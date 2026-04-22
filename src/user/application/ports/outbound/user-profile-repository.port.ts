@@ -8,5 +8,5 @@ import type { PersistUserProfileInput } from "../../types/register-user.types.js
  * Upsert semantics are required — do not insert-only.
  */
 export interface UserProfileRepositoryPort {
-  save(user: PersistUserProfileInput): Promise<void>;
+  save(input: PersistUserProfileInput): Promise<void>;
 }

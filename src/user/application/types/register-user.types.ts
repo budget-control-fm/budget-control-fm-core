@@ -9,14 +9,6 @@ export interface RegisterUserResult {
   userId: string;
 }
 
-export interface UserDto {
-  id: string;
-  fullName: string;
-  email: string;
-  birthDate: string;
-  createdAt: string;
-  updatedAt: string;
-}
 export interface RegisterAuthUserInput {
   id: string;
   email: string;
