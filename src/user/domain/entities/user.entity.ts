@@ -1,4 +1,4 @@
-import { UserId, FullName, Password } from "../value-objects/index.js";
+import { UserId, FullName } from "../value-objects/index.js";
 import { Email, IsoDate } from "../../../kernel/domain/value-objects/index.js";
 
 export class User {
@@ -17,7 +17,6 @@ export class User {
     id: UserId;
     fullName: FullName;
     email: Email;
-    password: Password;
     birthDate: IsoDate;
     createdAt: IsoDate;
     updatedAt: IsoDate;
