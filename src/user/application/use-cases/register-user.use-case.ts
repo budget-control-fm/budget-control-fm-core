@@ -34,7 +34,6 @@ export class RegisterUserUseCase {
       id,
       fullName,
       email,
-      password,
       birthDate,
       createdAt: now,
       updatedAt: now,
