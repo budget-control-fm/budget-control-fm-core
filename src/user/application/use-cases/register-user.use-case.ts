@@ -23,12 +23,12 @@ export class RegisterUserUseCase {
   ) {}
 
   async execute(command: RegisterUserCommand): Promise<RegisterUserResult> {
-    const id = UserId.of(this.idGenerator.generate());
     const fullName = FullName.of(command.fullName);
     const email = Email.of(command.email);
     const password = Password.of(command.password);
     const birthDate = IsoDate.of(command.birthDate);
     const now = IsoDate.of(this.clock.today());
+    const id = UserId.of(this.idGenerator.generate(email.value));
 
     const user = User.create({
       id,
