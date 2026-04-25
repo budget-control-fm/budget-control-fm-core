@@ -1,5 +1,14 @@
 # budget-control-fm-core
 
+## 0.6.3
+
+### Patch Changes
+
+- f30afbf: id generator fixed
+- f5001c1: Fixed User's register use cases
+- ed22d19: user use cases
+- afbc04f: updated use cases
+
 ## 0.6.2
 
 ### Patch Changes
